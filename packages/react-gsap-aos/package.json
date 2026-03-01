@@ -2,15 +2,15 @@
   "name": "react-gsap-aos",
   "version": "0.0.1",
   "description": "A lightweight React (Next.js compatible) library that implements AOS (Animation on Scroll) using GSAP and ScrollTrigger.",
-  "author": "danielchim",
+  "author": "Gaia Yang",
   "license": "MIT",
-  "homepage": "https://github.com/danielchim/react-gsap-aos",
+  "homepage": "https://github.com/GaiaYang/react-gsap-aos",
   "repository": {
     "type": "git",
-    "url": "https://github.com/danielchim/react-gsap-aos.git",
+    "url": "https://github.com/GaiaYang/react-gsap-aos.git",
     "directory": "packages/react-gsap-aos"
   },
-  "bugs": "https://github.com/danielchim/react-gsap-aos/issues",
+  "bugs": "https://github.com/GaiaYang/react-gsap-aos/issues",
   "keywords": [
     "react",
     "nextjs",
