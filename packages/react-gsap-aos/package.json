@@ -2,15 +2,15 @@
   "name": "react-gsap-aos",
   "version": "0.0.1",
   "description": "A lightweight React (Next.js compatible) library that implements AOS (Animation on Scroll) using GSAP and ScrollTrigger.",
-  "author": "Gaia Yang",
+  "author": "danielchim",
   "license": "MIT",
-  "homepage": "https://github.com/GaiaYang/react-gsap-aos",
+  "homepage": "https://github.com/danielchim/react-gsap-aos",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GaiaYang/react-gsap-aos.git",
+    "url": "https://github.com/danielchim/react-gsap-aos.git",
     "directory": "packages/react-gsap-aos"
   },
-  "bugs": "https://github.com/GaiaYang/react-gsap-aos/issues",
+  "bugs": "https://github.com/danielchim/react-gsap-aos/issues",
   "keywords": [
     "react",
     "nextjs",
@@ -27,6 +27,21 @@
   "files": [
     "dist"
   ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./constants": {
+      "import": "./dist/constants.js",
+      "require": "./dist/constants.cjs",
+      "types": "./dist/constants.d.ts"
+    }
+  },
   "scripts": {
     "build": "tsup",
     "lint": "eslint"

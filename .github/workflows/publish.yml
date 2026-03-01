@@ -1,0 +1,71 @@
+name: Publish to npm
+
+# Triggers only when a version tag (e.g. v1.2.3) is pushed.
+# Workflow: bump version → commit → git tag vX.Y.Z → git push --follow-tags
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  publish:
+    name: Build, check & publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # read repo to checkout
+      id-token: write # required for npm provenance
+
+    steps:
+      # ── 1. Checkout ────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Setup pnpm ──────────────────────────────────────────────────────
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        # reads packageManager field from root package.json automatically
+
+      # ── 3. Setup Node ──────────────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          # Configures ~/.npmrc with NODE_AUTH_TOKEN for publish
+          registry-url: "https://registry.npmjs.org"
+
+      # ── 4. Install dependencies ────────────────────────────────────────────
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 5. Type check ─────────────────────────────────────────────────────
+      - name: Type check (packages/react-gsap-aos)
+        run: pnpm --filter react-gsap-aos exec tsc --noEmit
+        # tsc reads tsconfig.json in packages/react-gsap-aos, which extends tsconfig.base.json
+
+      # ── 6. Lint ───────────────────────────────────────────────────────────
+      - name: Lint
+        run: pnpm -r run lint
+
+      # ── 7. Build packages/react-gsap-aos ───────────────────────────────────
+      - name: Build
+        run: pnpm --filter react-gsap-aos run build
+
+      # ── 8. Verify the tag version matches package.json version ─────────────
+      # Prevents accidentally publishing if someone tags the wrong commit.
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          PKG_VERSION=$(node -p "require('./packages/react-gsap-aos/package.json').version")
+          TAG_VERSION="${GITHUB_REF_NAME#v}"   # strips leading 'v' from tag
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "ERROR: Tag '$GITHUB_REF_NAME' does not match packages/react-gsap-aos version '$PKG_VERSION'"
+            exit 1
+          fi
+          echo "Version check passed: $PKG_VERSION"
+
+      # ── 9. Publish to npm ─────────────────────────────────────────────────
+      - name: Publish to npm
+        run: pnpm --filter react-gsap-aos publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
