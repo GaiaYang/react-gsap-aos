@@ -6,7 +6,10 @@ interface InputApplyFieldsetProps {
   value: string;
   onChangeValue: (value: string) => void;
   onApply: (value: string) => void;
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "value" | "onChange"
+  >;
 }
 
 export default function InputApplyFieldset({

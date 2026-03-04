@@ -1,8 +1,5 @@
 "use client";
 
-import { useAtomValue } from "jotai";
-
-import { tabIndexAtom } from "@/jotai/demo";
 import AnimationPanel from "@/components/animtaion-panel/AnimationPanel";
 
 export const MENU_DIALOG_ID = "menu-dialog";
@@ -12,25 +9,6 @@ function closeDialog() {
 }
 
 export function MenuDialog() {
-  const index = useAtomValue(tabIndexAtom);
-
-  function renderMenu() {
-    switch (index) {
-      case 0:
-        return (
-          <AnimationPanel key={0} filter={["easing", "anchor-placement"]} />
-        );
-      case 1:
-        return <AnimationPanel key={1} />;
-      case 2:
-        return (
-          <AnimationPanel key={2} filter={["easing", "anchor-placement"]} />
-        );
-      default:
-        break;
-    }
-  }
-
   return (
     <dialog id={MENU_DIALOG_ID} className="modal">
       <div className="modal-box max-w-3xl">
@@ -56,7 +34,7 @@ export function MenuDialog() {
             </svg>
           </button>
         </div>
-        {renderMenu()}
+        <AnimationPanel />
       </div>
       <button type="button" onClick={closeDialog} className="modal-backdrop" />
     </dialog>
