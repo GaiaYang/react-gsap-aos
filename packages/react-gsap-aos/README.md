@@ -1,36 +1,65 @@
 # react-gsap-aos
 
-輕量的 GSAP + ScrollTrigger 整合，用法類似 AOS，專為 React / Next.js 設計。
+[中文文檔](README.zh-TW.md) | English
 
-動畫樣式參考： [AOS](https://github.com/michalsnik/aos)
+A lightweight GSAP + ScrollTrigger integration with an AOS-like API, specifically designed for React and Next.js applications.
 
-## 功能
+[![npm version](https://img.shields.io/npm/v/react-gsap-aos.svg)](https://www.npmjs.com/package/react-gsap-aos)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-- 基於 GSAP + ScrollTrigger 的捲動觸發動畫
-- API 模仿 AOS，易於 React / Next.js 使用
-- 支援 data-aos 屬性與函式轉換
-- 可在多個區塊平行使用，避免互相干擾
-- TypeScript 完整支援，包含動畫/緩動/錨點型別
-- 輕量且 SSR 友善，具備卸載清理機制
+[Live Demo](https://react-gsap-aos-nextjs.vercel.app) | [GitHub](https://github.com/GaiaYang/react-gsap-aos)
 
-## 安裝
+## What is react-gsap-aos?
+
+`react-gsap-aos` bridges the gap between GSAP's powerful animation capabilities and the simplicity of AOS (Animate On Scroll). It provides:
+
+- **Familiar API**: If you've used AOS, you already know how to use this
+- **GSAP Power**: Built on GSAP + ScrollTrigger for smooth, performant animations
+- **React-First**: Designed specifically for React and Next.js with proper SSR support
+- **TypeScript**: Full type safety for animations, easings, and anchor placements
+- **Automatic Cleanup**: Properly manages animation lifecycle with React's component lifecycle
+
+### Problem It Solves
+
+While AOS is great for vanilla JavaScript, integrating it with React can be problematic:
+
+- Manual initialization and cleanup required
+- Not SSR-friendly
+- Limited TypeScript support
+- Difficult to use with dynamic content
+
+`react-gsap-aos` solves these issues by providing a React-native solution that automatically handles DOM mutations, component lifecycle, and SSR scenarios.
+
+## Features
+
+- 🎬 Scroll-triggered animations powered by GSAP + ScrollTrigger
+- 🎯 AOS-like API with `data-aos` attributes
+- ⚛️ Built for React / Next.js with SSR support
+- 🔄 Automatic animation management with DOM mutations
+- 📦 Multiple parallel scopes without interference
+- 🎨 34 animation presets (fade, slide, flip, zoom variants)
+- 🎭 17 easing options from GSAP
+- 📍 9 anchor placement options for precise triggering
+- 🧹 Automatic cleanup on component unmount
+- 💪 Full TypeScript support
+
+## Installation
 
 ```bash
-pnpm install react-gsap-aos gsap @gsap/react
+npm install react-gsap-aos gsap @gsap/react
+# or
+yarn add react-gsap-aos gsap @gsap/react
+# or
+pnpm add react-gsap-aos gsap @gsap/react
 ```
 
-參考：
+### Peer Dependencies
 
-- [gsap](https://greensock.com/gsap)
-- [@gsap/react](https://greensock.com/scrolltrigger)
+- `react` >= 17
+- `gsap` ^3.12.5
+- `@gsap/react` ^2.1.2
 
-### 版本需求
-
-- react >= 17
-- gsap ^3.12.5
-- @gsap/react ^2.1.2
-
-## 快速開始
+## Quick Start
 
 ```tsx
 import { AOSProvider } from "react-gsap-aos/client";
@@ -48,156 +77,146 @@ export default function Demo() {
 }
 ```
 
-## 用法
+## Usage
 
-### 設置 `AOSProvider`
+### Setting up AOSProvider
 
-只要把 `AOSProvider` 包覆在需要動畫的區塊外層，
-元件內的所有子元素就會自動被監聽與啟動動畫。
-
-> `"overflow-hidden"` 樣式是解決動畫元素起始階段溢出問題。
+Wrap your animated content with `AOSProvider`. All child elements with `data-aos` attributes will be automatically animated.
 
 ```tsx
 import { AOSProvider } from "react-gsap-aos/client";
 
 export default function Demo() {
   return (
-    <AOSProvider className="overflow-hidden">{/* 動畫區塊 */}</AOSProvider>
-  );
-}
-```
-
-> ⚠️ 不要巢狀使用 `AOSProvider`，會造成重複監聽與多餘動畫。
-
-```tsx
-import { AOSProvider } from "react-gsap-aos/client";
-
-export default function Demo() {
-  return (
-    <AOSProvider>
-      {/* ❌ 會導致重複監聽元素以及創建動畫 */}
-      <AOSProvider />
+    <AOSProvider className="overflow-hidden">
+      {/* Your animated content */}
     </AOSProvider>
   );
 }
 ```
 
-`AOSProvider` 是呼叫 `useAOSScope` hook 的包裝元件，大部分情況下使用此組件即可；
+> The `overflow-hidden` class prevents elements from overflowing during their initial animation state.
 
-如果你需要更細緻的控制，可以改用 [`useAOSScope`](#useaosscope)。
+⚠️ **Important**: Do not nest `AOSProvider` components, as this will cause duplicate listeners and animations.
 
-此外該組件提供了兩個屬性供調整：
+### Configuring Animations with Data Attributes
 
-- `component`：渲染的容器元素，預設為 `'div'`。
-- `options`：與 `toAOSProps` 同樣結構的默認動畫參數，會應用於該範圍內的所有新動畫元素。
-
-```tsx
-<AOSProvider
-  component="section"
-  options={{
-    animation: "fade",
-    offset: 120,
-    delay: 0,
-    duration: 400,
-    easing: "none",
-    once: false,
-    mirror: false,
-    anchorPlacement: "top-bottom",
-  }}
-></AOSProvider>
-```
-
-### 使用 data attributes 設定動畫
-
-透過帶有 `data-aos-*` 開頭的屬性來調整行為
+Use `data-aos-*` attributes to configure animation behavior:
 
 ```tsx
 <div
-  data-aos="fade"
+  data-aos="fade-up"
   data-aos-offset={120}
   data-aos-delay={0}
   data-aos-duration={400}
-  data-aos-easing="none"
+  data-aos-easing="ease-out-cubic"
   data-aos-mirror={false}
   data-aos-once={false}
   data-aos-anchor-placement="top-bottom"
 >
-  Hello AOS
+  Animated content
 </div>
 ```
 
-### 使用 `toAOSProps` 設定動畫
+### Using toAOSProps Helper
 
-該函式提供完整型別且會過濾無效的屬性值後轉換成 data attributes
+For better TypeScript support and validation, use the `toAOSProps` helper:
 
 ```tsx
+import { toAOSProps } from "react-gsap-aos";
+
 <div
   {...toAOSProps({
-    animation: "fade",
+    animation: "fade-up",
     offset: 120,
     delay: 0,
     duration: 400,
-    easing: "none",
+    easing: "power2.out",
     once: false,
     mirror: false,
     anchorPlacement: "top-bottom",
   })}
 >
-  Hello AOS
-</div>
+  Animated content
+</div>;
 ```
 
-### 容器定位 data-aos-container
+### Container Positioning with data-aos-container
 
-為了避免 ScrollTrigger 計算偏移時造成觸發點不正確，請在需要的父容器加上 `data-aos-container`：
+To ensure accurate ScrollTrigger calculations, mark parent containers with `data-aos-container`:
 
 ```tsx
-return (
-  <AOSProvider className="overflow-hidden">
-    {/* ✅ 指定定位容器 */}
-    <div data-aos-container>
-      <div data-aos="fade-up" data-aos-offset="200">
-        Hello AOS
-      </div>
-    </div>
-
-    {/* ❌ 未指定容器，可能導致觸發點偏移 */}
+<AOSProvider className="overflow-hidden">
+  {/* ✅ Correct: Container specified */}
+  <div data-aos-container>
     <div data-aos="fade-up" data-aos-offset="200">
       Hello AOS
     </div>
-  </AOSProvider>
-);
-```
+  </div>
 
-`react-gsap-aos` 會先往上尋找帶有 `data-aos-container` 的最近父容器，若找不到則使用動畫元素本身作為錨點。
-
-支援嵌套容器：
-
-```tsx
-<div data-aos-container>
+  {/* ❌ Incorrect: May cause offset issues */}
   <div data-aos="fade-up" data-aos-offset="200">
     Hello AOS
   </div>
+</AOSProvider>
+```
+
+Nested containers are supported:
+
+```tsx
+<div data-aos-container>
+  <div data-aos="fade-up">Parent animation</div>
+
   <div data-aos-container>
-    <div data-aos="fade-up" data-aos-offset="200">
-      Nested AOS
-    </div>
+    <div data-aos="fade-up">Nested animation</div>
   </div>
 </div>
 ```
 
-## API
+## API Reference
 
-### `useAOSScope`
+### AOSProvider
 
-這個 hook 是整個套件的核心，負責監聽子元素 `data-aos-*` 屬性來創建、修改動畫並且會在離開頁面時卸載動畫，`AOSProvider` 是它的輕量包裝元件，通常你只需使用 `AOSProvider`。
+A wrapper component that provides animation scope for its children.
 
-若你想在函式元件中直接掌握 container ref，就可以直接使用此 hook。
+**Props:**
 
-1. Next.js / SSR 專案在使用此 hook 的檔案最上方加上 `"use client"`。
-2. 呼叫後把回傳的 `containerRef` 綁定到最外層容器。
+| Prop        | Type                        | Default     | Description                                |
+| ----------- | --------------------------- | ----------- | ------------------------------------------ |
+| `component` | `React.ElementType`         | `'div'`     | The container element to render            |
+| `className` | `string`                    | `undefined` | CSS classes for the container              |
+| `options`   | `Partial<AnimationOptions>` | `undefined` | Default animation options for all children |
+| `children`  | `React.ReactNode`           | -           | Child elements                             |
 
-> ⚠️ 建議綁定在頁面或元件的區塊層級，不要放在 `app/layout.tsx`，以便 GSAP 在組件卸載時能正確清理。
+**Example:**
+
+```tsx
+<AOSProvider
+  component="section"
+  className="overflow-hidden"
+  options={{
+    duration: 600,
+    easing: "power2.out",
+    once: true,
+  }}
+>
+  {/* Children will inherit these default options */}
+</AOSProvider>
+```
+
+> The default options only affect animations generated subsequently. This is intentional behavior.
+
+### useAOSScope
+
+The core hook that powers `AOSProvider`. Use this when you need direct control over the container ref.
+
+```tsx
+function useAOSScope<E extends HTMLElement = HTMLElement>(
+  options?: Partial<AnimationOptions>,
+): { containerRef: React.RefObject<E> };
+```
+
+**Example:**
 
 ```tsx
 "use client";
@@ -205,205 +224,159 @@ return (
 import { useAOSScope } from "react-gsap-aos/client";
 
 export default function Demo() {
-  const { containerRef } = useAOSScope<HTMLDivElement>();
+  const { containerRef } = useAOSScope<HTMLDivElement>({
+    easing: "bounce.out",
+    duration: 800,
+  });
 
   return (
     <div ref={containerRef} className="overflow-hidden">
-      {/* 動畫區塊 */}
+      <div data-aos="fade-up">Animated content</div>
     </div>
   );
 }
 ```
 
-不要巢狀呼叫 `useAOSScope`，但是你可以像下面這樣平行使用。
+⚠️ **Important**:
+
+- Do not nest `useAOSScope` calls
+- Use in client components only (add `"use client"` directive)
+- Avoid placing in `app/layout.tsx` for proper cleanup
+
+**Parallel Usage:**
 
 ```tsx
 function Demo() {
   return (
     <div>
-      {/* ✅ 平行使用互不干涉 */}
-      <Box />
-      <Box2 />
+      <Section1 />
+      <Section2 />
     </div>
   );
 }
 
-function Box() {
+function Section1() {
   const { containerRef } = useAOSScope<HTMLDivElement>();
-  return (
-    <div ref={containerRef} className="overflow-hidden">
-      …
-    </div>
-  );
+  return <div ref={containerRef}>...</div>;
 }
 
-function Box2() {
+function Section2() {
   const { containerRef } = useAOSScope<HTMLDivElement>();
-  return (
-    <div ref={containerRef} className="overflow-hidden">
-      …
-    </div>
-  );
+  return <div ref={containerRef}>...</div>;
 }
 ```
 
-若要在區塊層級覆蓋預設設定，可傳入選項：
+### refreshAOS
+
+Manually refresh ScrollTrigger calculations when DOM changes occur.
 
 ```tsx
-const { containerRef } = useAOSScope<HTMLDivElement>({
-  easing: "bounce",
-  duration: 300,
-});
-```
-
-> 此設定只會應用於該容器中新產生的動畫元素，不建議頻繁動態變更此項設定。
-
-## 刷新動畫位置
-
-若動態修改 DOM（插入/移除元素或修改佈局），請手動呼叫：
-
-```ts
-"use client";
-
 import { refreshAOS } from "react-gsap-aos";
 
+// Call after dynamic DOM changes
 refreshAOS();
 ```
 
-`refreshAOS()` 會封裝 `ScrollTrigger.refresh(true)`，在大多數情況下可安全使用。
-
-詳細說明可參考 [GSAP ScrollTrigger refresh()](<https://gsap.com/docs/v3/Plugins/ScrollTrigger/static.refresh()>)
-
-### 動態 DOM 範例
-
-以下範例示範在動態增減元素導致佈局變動時，如何呼叫 `refreshAOS()` ：
+**Example with Dynamic Content:**
 
 ```tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAOSScope, refreshAOS } from "react-gsap-aos";
+import { AOSProvider, refreshAOS } from "react-gsap-aos/client";
 
 export default function DynamicList() {
-  const { containerRef } = useAOSScope<HTMLDivElement>();
-  const [show, setShow] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [items, setItems] = useState([1, 2, 3]);
 
   useEffect(() => {
-    // 當 show 變動時，刷新 ScrollTrigger
+    // Refresh after visible change
     refreshAOS();
-  }, [show]);
+  }, [visible]);
 
   return (
-    <div ref={containerRef} className="overflow-hidden">
-      <button type="button" onClick={() => setShow((e) => !e)}>
-        switch
-      </button>
-      {show ? <div className="h-80" /> : null}
+    <AOSProvider className="overflow-hidden">
+      <button onClick={() => setVisible((e) => !e)}>switch visible</button>
+      // When visible changes, the layout changes.
+      {visible ? <div className="h-80" /> : null}
       <div data-aos-container>
-        <div data-aos="fade-up">Hello AOS</div>
+        <div key={item} data-aos="fade-up">
+          Hello AOS
+        </div>
       </div>
-    </div>
+    </AOSProvider>
   );
 }
 ```
 
-## 型別與選項
+### toAOSProps
 
-### 屬性選項
+Converts animation options to data attributes with type safety.
 
-| 名稱            | 型別              | 對應 `data-aos`             | 預設           | 說明                     |
-| --------------- | ----------------- | --------------------------- | -------------- | ------------------------ |
-| animation       | `Animation`       | `data-aos`                  | `undefined`    | 動畫類型                 |
-| offset          | `number`          | `data-aos-offset`           | `120`          | 提前觸發動畫的距離（px） |
-| delay           | `number`          | `data-aos-delay`            | `0`            | 動畫延遲（ms）           |
-| duration        | `number`          | `data-aos-duration`         | `400`          | 動畫持續時間（ms）       |
-| easing          | `Easing`          | `data-aos-easing`           | `"none"`       | 緩動曲線                 |
-| once            | `boolean`         | `data-aos-once`             | `false`        | 是否只執行一次           |
-| mirror          | `boolean`         | `data-aos-mirror`           | `false`        | 是否於離開時反向播放     |
-| anchorPlacement | `AnchorPlacement` | `data-aos-anchor-placement` | `"top-bottom"` | 觸發位置設定             |
+```tsx
+import { toAOSProps } from "react-gsap-aos";
 
-### Animation
+const props = toAOSProps({
+  animation: "fade-up",
+  duration: 600,
+  easing: "power2.out",
+});
+// Returns: { "data-aos": "fade-up", "data-aos-duration": 600, ... }
+```
 
-- fade
-- fade-up
-- fade-down
-- fade-left
-- fade-right
-- fade-up-right
-- fade-up-left
-- fade-down-right
-- fade-down-left
-- flip-up
-- flip-down
-- flip-left
-- flip-right
-- slide-up
-- slide-down
-- slide-left
-- slide-right
-- zoom-in
-- zoom-in-up
-- zoom-in-down
-- zoom-in-left
-- zoom-in-right
-- zoom-out
-- zoom-out-up
-- zoom-out-down
-- zoom-out-left
-- zoom-out-right
+## Animation Options
 
-### Easing
+| Option            | Type              | Data Attribute              | Default        | Description                    |
+| ----------------- | ----------------- | --------------------------- | -------------- | ------------------------------ |
+| `animation`       | `Animation`       | `data-aos`                  | `undefined`    | Animation type                 |
+| `offset`          | `number`          | `data-aos-offset`           | `120`          | Offset (px) from trigger point |
+| `delay`           | `number`          | `data-aos-delay`            | `0`            | Animation delay (ms)           |
+| `duration`        | `number`          | `data-aos-duration`         | `400`          | Animation duration (ms)        |
+| `easing`          | `Easing`          | `data-aos-easing`           | `"none"`       | Easing function                |
+| `once`            | `boolean`         | `data-aos-once`             | `false`        | Animate only once              |
+| `mirror`          | `boolean`         | `data-aos-mirror`           | `false`        | Reverse animation on scroll up |
+| `anchorPlacement` | `AnchorPlacement` | `data-aos-anchor-placement` | `"top-bottom"` | Trigger position               |
 
-- none
-- power1
-- power1.in
-- power1.out
-- power1.inOut
-- power2
-- power2.in
-- power2.out
-- power2.inOut
-- power3
-- power3.in
-- power3.out
-- power3.inOut
-- power4
-- power4.in
-- power4.out
-- power4.inOut
-- back
-- back.in
-- back.out
-- back.inOut
-- bounce
-- bounce.in
-- bounce.out
-- bounce.inOut
-- circ
-- circ.in
-- circ.out
-- circ.inOut
-- elastic
-- elastic.in
-- elastic.out
-- elastic.inOut
-- expo
-- expo.in
-- expo.out
-- expo.inOut
-- sine
-- sine.in
-- sine.out
-- sine.inOut
+## Available Types
 
-## AnchorPlacement
+### Animation Types (34 total)
 
-- top-bottom
-- top-center
-- top-top
-- center-bottom
-- center-center
-- center-top
-- bottom-bottom
-- bottom-center
-- bottom-top
+**Fade Animations:**
+
+- `fade`, `fade-up`, `fade-down`, `fade-left`, `fade-right`
+- `fade-up-right`, `fade-up-left`, `fade-down-right`, `fade-down-left`
+
+**Flip Animations:**
+
+- `flip-up`, `flip-down`, `flip-left`, `flip-right`
+
+**Slide Animations:**
+
+- `slide-up`, `slide-down`, `slide-left`, `slide-right`
+
+**Zoom Animations:**
+
+- `zoom-in`, `zoom-in-up`, `zoom-in-down`, `zoom-in-left`, `zoom-in-right`
+- `zoom-out`, `zoom-out-up`, `zoom-out-down`, `zoom-out-left`, `zoom-out-right`
+
+### Easing Types (17 total)
+
+- `none`
+- `power1`, `power1.in`, `power1.out`, `power1.inOut`
+- `power2`, `power2.in`, `power2.out`, `power2.inOut`
+- `power3`, `power3.in`, `power3.out`, `power3.inOut`
+- `power4`, `power4.in`, `power4.out`, `power4.inOut`
+- `back`, `back.in`, `back.out`, `back.inOut`
+- `bounce`, `bounce.in`, `bounce.out`, `bounce.inOut`
+- `circ`, `circ.in`, `circ.out`, `circ.inOut`
+- `elastic`, `elastic.in`, `elastic.out`, `elastic.inOut`
+- `expo`, `expo.in`, `expo.out`, `expo.inOut`
+- `sine`, `sine.in`, `sine.out`, `sine.inOut`
+
+### Anchor Placement Types (9 total)
+
+Format: `[element-position]-[viewport-position]`
+
+- `top-bottom`, `top-center`, `top-top`
+- `center-bottom`, `center-center`, `center-top`
+- `bottom-bottom`, `bottom-center`, `bottom-top`
