@@ -20,7 +20,7 @@ export default function InputApplyFieldset({
   const inputValueRef = useRef(value);
 
   return (
-    <fieldset className="fieldset">
+    <fieldset className="fieldset w-[clamp(3rem,20rem,100%)]">
       <legend className="fieldset-legend">{label}</legend>
       <div className="join">
         <label className="input join-item">
@@ -46,7 +46,9 @@ export default function InputApplyFieldset({
           套用
         </button>
       </div>
-      {caption ? <p className="label">{caption}</p> : null}
+      {caption ? (
+        <p className="label">{caption === " " ? "\u00a0" : caption}</p>
+      ) : null}
     </fieldset>
   );
 }

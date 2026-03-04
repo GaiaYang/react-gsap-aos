@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import cn from "@/utils/cn";
 
@@ -7,9 +7,9 @@ import EasingFilter from "./EasingFilter";
 import AnchorPlacementFilter from "./AnchorPlacementFilter";
 import OtherOptions from "./OtherOptions";
 import DevTool from "./DevTool";
-import { refreshAOS } from "react-gsap-aos";
+import CurrentAnimationOptions from "./CurrentAnimationOptions";
 
-type FilterType = "animation" | "easing" | "anchor-placement";
+type FilterType = "animation" | "easing" | "anchor-placement" | "other" | "dev";
 
 interface Tab {
   value: string;
@@ -25,19 +25,22 @@ const tabs: Tab[] = [
 ] satisfies readonly Tab[];
 
 interface FilterPanelProps {
-  filter?: FilterType[];
+  filter?: Exclude<FilterType, "other" | "dev">[];
 }
 
 export default function AnimationPanel({ filter }: FilterPanelProps) {
   const [tabIndex, setTabIndex] = useState(0);
   const _tabs = tabs.filter((item) => {
-    if (item.value === "other" || item.value === "dev") {
+    const value = item.value as FilterType;
+
+    // 固定顯示
+    if (value === "other" || value === "dev") {
       return true;
     }
 
     if (Array.isArray(filter)) {
       if (filter.length > 0) {
-        return filter.includes(item.value as FilterType);
+        return filter.includes(value);
       }
       return false;
     }
@@ -45,11 +48,6 @@ export default function AnimationPanel({ filter }: FilterPanelProps) {
     return true;
   });
   const tabValue = _tabs[tabIndex]?.value ?? _tabs[0].value;
-
-  useEffect(() => {
-    // 選項卡切換造成佈局變化
-    refreshAOS();
-  }, [tabValue]);
 
   function renderTab(item: Tab) {
     return (
@@ -85,11 +83,14 @@ export default function AnimationPanel({ filter }: FilterPanelProps) {
   }
 
   return (
-    <div className="grid gap-2">
-      <div role="tablist" className="tabs tabs-border">
-        {_tabs.map(renderTab)}
+    <div className="grid gap-4">
+      <div className="overflow-x-auto">
+        <div role="tablist" className="tabs tabs-border min-w-max">
+          {_tabs.map(renderTab)}
+        </div>
       </div>
       {renderPanel()}
+      <CurrentAnimationOptions />
     </div>
   );
 }

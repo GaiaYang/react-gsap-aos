@@ -7,12 +7,13 @@ import {
   mirrorAtom,
   durationAtom,
 } from "@/jotai/animation";
-import CheckboxFieldset from "../form/CheckboxFieldset";
-import InputApplyFieldset from "../form/InputApplyFieldset";
+
+import CheckboxFieldset from "@/components/form/CheckboxFieldset";
+import InputApplyFieldset from "@/components/form/InputApplyFieldset";
 
 export default function OtherOptions() {
   return (
-    <div className="flex flex-wrap items-end gap-x-4">
+    <div className="flex flex-wrap items-end gap-3">
       <OffsetInput />
       <DurationInput />
       <OnceCheckbox />
@@ -32,14 +33,15 @@ function OffsetInput() {
   return (
     <InputApplyFieldset
       label="提前觸發動畫的距離"
+      caption=" "
       inputProps={{
         type: "number",
         inputMode: "numeric",
       }}
-      value={inputValue}
+      value={inputValue || "0"}
       onChangeValue={setInputValue}
       onApply={(value) => {
-        const next = parseInt(value, 10);
+        const next = value ? parseInt(value, 10) : 0;
         setOffset(Number.isNaN(next) ? 0 : next);
       }}
     />
@@ -62,7 +64,7 @@ function DurationInput() {
         type: "number",
         inputMode: "numeric",
       }}
-      value={inputValue}
+      value={inputValue || "0"}
       onChangeValue={setInputValue}
       onApply={(value) => {
         const next = parseInt(value, 10);

@@ -10,11 +10,11 @@ export default function CheckboxFieldset({
   onChangeValue,
 }: CheckboxFieldsetProps) {
   return (
-    <fieldset className="fieldset">
-      <label className="label h-10">
+    <fieldset className="fieldset w-[clamp(3rem,20rem,100%)]">
+      <label className="label h-10 text-sm text-current">
         <input
           type="checkbox"
-          className="checkbox"
+          className="checkbox checkbox-primary"
           checked={checked}
           onChange={(event) => {
             onChangeValue(event.currentTarget.checked);

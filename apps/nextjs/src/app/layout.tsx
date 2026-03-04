@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { noto_sans_tc, noto_serif_tc, noto_sans_mono } from "@/libs/fonts";
 import clsx from "clsx";
+import BasicLayout from "@/components/layout/basic";
 
 export const metadata: Metadata = {
   title: {
@@ -30,7 +31,7 @@ export default function RootLayout({
           "antialiased",
         )}
       >
-        {children}
+        <BasicLayout>{children}</BasicLayout>
       </body>
     </html>
   );

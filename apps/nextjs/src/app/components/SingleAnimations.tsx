@@ -9,11 +9,11 @@ import AnchorPlacementMarker from "@/components/animtaion-panel/AnchorPlacementM
 
 const list = Array(20).fill(null);
 
-export default function SingleAnimation() {
+export default function SingleAnimations() {
   const options = useDynamicOptions();
 
   return (
-    <ul className="mx-auto flex w-full max-w-7xl flex-col gap-[inherit]">
+    <ul className="mx-auto flex w-full max-w-3xl flex-col gap-[inherit]">
       {list.map((_, index) => (
         <li key={index} data-aos-container className="relative">
           <AnchorPlacementMarker />

@@ -26,7 +26,7 @@ export default function OffsetMarker() {
   return (
     <div
       className={cn(
-        "bg-primary pointer-events-none fixed left-0 flex h-px flex-col justify-end",
+        "bg-primary pointer-events-none fixed left-0 z-20 flex h-px flex-col justify-end",
         (() => {
           switch (anchor) {
             case "top":
@@ -44,7 +44,13 @@ export default function OffsetMarker() {
         transform: `translateY(${-offset}px)`,
       }}
     >
-      <span className="text-primary mx-2 font-semibold">動畫觸發距離</span>
+      <span
+        className={cn("text-primary mx-2 my-1 font-semibold", {
+          "translate-y-full": anchor === "top",
+        })}
+      >
+        動畫觸發距離
+      </span>
     </div>
   );
 }

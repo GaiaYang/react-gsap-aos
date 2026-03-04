@@ -13,7 +13,7 @@ import {
 } from "@/jotai/animation";
 
 export default function ResetButton() {
-  const setAnimationAtom = useSetAtom(animationAtom);
+  const setAnimation = useSetAtom(animationAtom);
   const setEasing = useSetAtom(easingAtom);
   const setAnchorPlacement = useSetAtom(anchorPlacementAtom);
   const setOffset = useSetAtom(offsetAtom);
@@ -23,7 +23,7 @@ export default function ResetButton() {
   const setMirror = useSetAtom(mirrorAtom);
 
   function onClick() {
-    setAnimationAtom(RESET);
+    setAnimation(RESET);
     setEasing(RESET);
     setAnchorPlacement(RESET);
     setOffset(RESET);

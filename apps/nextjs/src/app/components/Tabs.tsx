@@ -26,21 +26,23 @@ export default function Tabs() {
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
 
   return (
-    <div role="tablist" className="tabs tabs-box grow">
-      {tabs.map((item, index) => (
-        <button
-          key={item.value}
-          role="tab"
-          type="button"
-          onClick={() => {
-            setTabIndex(index);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          className={cn("tab", { "tab-active": tabIndex === index })}
-        >
-          {item.label}
-        </button>
-      ))}
+    <div className="overflow-x-auto">
+      <div role="tablist" className="tabs tabs-box min-w-max">
+        {tabs.map((item, index) => (
+          <button
+            key={item.value}
+            role="tab"
+            type="button"
+            onClick={() => {
+              setTabIndex(index);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            className={cn("tab", { "tab-active": tabIndex === index })}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

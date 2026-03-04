@@ -12,7 +12,7 @@ export default function AllAnimations() {
   const options = useDynamicOptions();
 
   return (
-    <ul className="mx-auto flex w-full max-w-7xl flex-col gap-[inherit]">
+    <ul className="mx-auto flex w-full max-w-3xl flex-col gap-[inherit]">
       {animations.map((item, index) => (
         <li key={item} data-aos-container className="relative">
           <AnchorPlacementMarker />

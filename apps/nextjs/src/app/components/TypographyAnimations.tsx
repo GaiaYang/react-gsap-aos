@@ -224,7 +224,7 @@ const contents: React.ReactNode[] = [
   <p key={34}>Hopefully that looks good enough to you.</p>,
 ];
 
-export default function Typography() {
+export default function TypographyAnimations() {
   const options = useDynamicOptions();
 
   function renderContent(item: React.ReactNode, index: number) {
