@@ -10,7 +10,7 @@ import TypographyAnimations from "./TypographyAnimations";
 
 import OffsetMarker from "@/components/animtaion-panel/OffsetMarker";
 
-export default function Panel() {
+export default function TabPanel() {
   const index = useAtomValue(tabIndexAtom);
 
   return (

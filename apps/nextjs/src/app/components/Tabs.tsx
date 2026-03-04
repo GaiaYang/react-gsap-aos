@@ -26,7 +26,7 @@ export default function Tabs() {
   const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
 
   return (
-    <div className="overflow-x-auto">
+    <div className="w-full overflow-x-auto">
       <div role="tablist" className="tabs tabs-box min-w-max">
         {tabs.map((item, index) => (
           <button

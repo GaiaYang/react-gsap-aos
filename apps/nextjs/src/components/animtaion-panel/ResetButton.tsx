@@ -34,10 +34,8 @@ export default function ResetButton() {
   }
 
   return (
-    <fieldset className="fieldset">
-      <button type="button" onClick={onClick} className="btn btn-error">
-        重置所有動畫
-      </button>
-    </fieldset>
+    <button type="button" onClick={onClick} className="btn btn-error">
+      重置所有動畫
+    </button>
   );
 }

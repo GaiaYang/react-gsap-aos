@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAtom } from "jotai";
 
 import {
@@ -24,11 +24,7 @@ export default function OtherOptions() {
 
 function OffsetInput() {
   const [offset, setOffset] = useAtom(offsetAtom);
-  const [inputValue, setInputValue] = useState("");
-
-  useEffect(() => {
-    setInputValue(offset.toString(10));
-  }, [offset]);
+  const [inputValue, setInputValue] = useState(offset.toString(10));
 
   return (
     <InputApplyFieldset
@@ -50,11 +46,7 @@ function OffsetInput() {
 
 function DurationInput() {
   const [duration, setDuration] = useAtom(durationAtom);
-  const [inputValue, setInputValue] = useState("");
-
-  useEffect(() => {
-    setInputValue(duration.toString(10));
-  }, [duration]);
+  const [inputValue, setInputValue] = useState(duration.toString(10));
 
   return (
     <InputApplyFieldset
