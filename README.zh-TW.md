@@ -40,12 +40,10 @@ react-gsap-aos/
         └── src/
 ```
 
-### 慣例
+### 規範
 
-- **套件管理器**：永遠使用 `pnpm`
-- **TypeScript**：所有程式碼都必須有型別
+- **套件管理器**：使用 `pnpm`
 - **匯入**：內部匯入使用 `@/` 別名
-- **客戶端元件**：使用 hooks 時標記 `"use client"` 指令
 - **匯出**：
   - `react-gsap-aos` - 型別和工具
   - `react-gsap-aos/client` - 客戶端元件和 hooks

@@ -42,10 +42,8 @@ react-gsap-aos/
 
 ### Conventions
 
-- **Package Manager**: Always use `pnpm`
-- **TypeScript**: All code must be typed
+- **Package Manager**: Use `pnpm`
 - **Imports**: Use `@/` alias for internal imports
-- **Client Components**: Mark with `"use client"` directive when using hooks
 - **Exports**:
   - `react-gsap-aos` - Types and utilities
   - `react-gsap-aos/client` - Client-side components and hooks
