@@ -29,16 +29,17 @@ function OffsetInput() {
   return (
     <InputApplyFieldset
       label="Offset"
-      caption=" "
       inputProps={{
         type: "number",
         inputMode: "numeric",
       }}
-      value={inputValue || "0"}
+      value={inputValue}
       onChangeValue={setInputValue}
       onApply={(value) => {
-        const next = value ? parseInt(value, 10) : 0;
-        setOffset(Number.isNaN(next) ? 0 : next);
+        const int = parseInt(value, 10);
+        const next = Number.isInteger(int) ? int : 0;
+        setOffset(next);
+        setInputValue(String(next));
       }}
     />
   );
@@ -51,16 +52,17 @@ function DurationInput() {
   return (
     <InputApplyFieldset
       label="Duration"
-      caption="min: 100"
       inputProps={{
         type: "number",
         inputMode: "numeric",
       }}
-      value={inputValue || "0"}
+      value={inputValue}
       onChangeValue={setInputValue}
       onApply={(value) => {
-        const next = parseInt(value, 10);
-        setDuration(Math.max(Number.isNaN(next) ? 0 : next, 100));
+        const int = parseInt(value, 10);
+        const next = Math.max(0, Number.isInteger(int) ? int : 0);
+        setDuration(next);
+        setInputValue(String(next));
       }}
     />
   );
