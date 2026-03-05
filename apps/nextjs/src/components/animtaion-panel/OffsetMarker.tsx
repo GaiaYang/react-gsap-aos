@@ -26,7 +26,7 @@ export default function OffsetMarker() {
   return (
     <div
       className={cn(
-        "bg-primary pointer-events-none fixed left-0 z-20 flex h-px flex-col justify-end",
+        "bg-primary pointer-events-none fixed left-0 z-1 flex h-px flex-col justify-end",
         (() => {
           switch (anchor) {
             case "top":

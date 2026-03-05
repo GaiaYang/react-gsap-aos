@@ -22,12 +22,17 @@ export default function AnchorPlacementMarker() {
   }
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-10 flex flex-col">
-      <div className="bg-primary/50 h-px w-dvw self-center" />
-      <div className="bg-primary/10 grow" />
+    <div
+      className={cn(
+        "pointer-events-none absolute inset-0 z-1 flex flex-col",
+        "*:w-dvw *:self-center",
+      )}
+    >
+      <div className="bg-primary/50 h-px" />
+      <div className="bg-primary/20 grow" />
       <div
         className={cn(
-          "bg-secondary/50 absolute h-px w-dvw self-center",
+          "bg-secondary/50 absolute h-px",
           (() => {
             switch (anchor) {
               case "top":
@@ -42,7 +47,7 @@ export default function AnchorPlacementMarker() {
           })(),
         )}
       />
-      <div className="bg-primary/50 h-px w-dvw self-center" />
+      <div className="bg-primary/50 h-px" />
     </div>
   );
 }

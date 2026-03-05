@@ -17,7 +17,7 @@ export default function Home() {
         <Tabs />
         <TabPanel />
         <OffsetMarker />
-        <div className="fixed right-4 bottom-4 flex flex-col gap-4">
+        <div className="fixed right-4 bottom-4 z-1 flex flex-col gap-4">
           <MenuDialogButton />
           <ToTopButton />
         </div>

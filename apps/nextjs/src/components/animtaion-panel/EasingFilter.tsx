@@ -13,7 +13,7 @@ export default function EasingFilter() {
 
   return (
     <TwoLevelSelect
-      label="動畫曲線"
+      label="Easing"
       categories={categories}
       enums={easings}
       value={easing}

@@ -18,10 +18,10 @@ interface Tab {
 
 const tabs: Tab[] = [
   { value: "animation", label: "動畫類型" },
-  { value: "easing", label: "動畫曲線" },
-  { value: "anchor-placement", label: "動畫錨點" },
+  { value: "easing", label: "緩動曲線" },
+  { value: "anchor-placement", label: "錨點位置" },
   { value: "other", label: "其他參數" },
-  { value: "dev", label: "開發人員工具" },
+  { value: "dev", label: "開發工具" },
 ] satisfies readonly Tab[];
 
 export default function AnimationPanel() {

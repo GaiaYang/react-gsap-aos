@@ -41,7 +41,7 @@ export default function AnimationFilter() {
 
   return (
     <TwoLevelSelect
-      label="動畫類型"
+      label="Animation"
       categories={categories}
       enums={animations}
       value={animation}

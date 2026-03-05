@@ -50,7 +50,7 @@ export default memo(function CurrentAnimationOptions() {
 
 function renderItem(item: Option, index: number) {
   return (
-    <div key={index} className="badge badge-primary">
+    <div key={index} className="badge badge-primary font-mono">
       {`${item.label}: ${item.value}`}
     </div>
   );

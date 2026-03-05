@@ -11,8 +11,8 @@ import CheckboxFieldset from "@/components/form/CheckboxFieldset";
 
 export default function DevTool() {
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex grow gap-[inherit]">
+    <div className="grid gap-3">
+      <div className="flex grow flex-wrap gap-[inherit]">
         <VisibleOffset />
         <VisibleAnchor />
       </div>
@@ -30,7 +30,7 @@ function VisibleAnchor() {
 
   return (
     <CheckboxFieldset
-      label="顯示動畫觸發點"
+      label="顯示 Anchor Placement 標記"
       checked={visible}
       onChangeValue={setVisible}
     />
@@ -42,7 +42,7 @@ function VisibleOffset() {
 
   return (
     <CheckboxFieldset
-      label="顯示動畫觸發距離"
+      label="顯示 Offset 標記"
       checked={visible}
       onChangeValue={setVisible}
     />

@@ -13,7 +13,7 @@ import InputApplyFieldset from "@/components/form/InputApplyFieldset";
 
 export default function OtherOptions() {
   return (
-    <div className="flex flex-wrap items-end gap-3">
+    <div className="flex flex-wrap gap-3">
       <OffsetInput />
       <DurationInput />
       <OnceCheckbox />
@@ -28,7 +28,7 @@ function OffsetInput() {
 
   return (
     <InputApplyFieldset
-      label="提前觸發動畫的距離"
+      label="Offset"
       caption=" "
       inputProps={{
         type: "number",
@@ -50,8 +50,8 @@ function DurationInput() {
 
   return (
     <InputApplyFieldset
-      label="動畫持續時間"
-      caption="最小輸入值: 100"
+      label="Duration"
+      caption="min: 100"
       inputProps={{
         type: "number",
         inputMode: "numeric",
@@ -70,11 +70,7 @@ function OnceCheckbox() {
   const [once, setOnce] = useAtom(onceAtom);
 
   return (
-    <CheckboxFieldset
-      label="是否只執行一次"
-      checked={once}
-      onChangeValue={setOnce}
-    />
+    <CheckboxFieldset label="Once" checked={once} onChangeValue={setOnce} />
   );
 }
 
@@ -83,7 +79,7 @@ function MirrorCheckbox() {
 
   return (
     <CheckboxFieldset
-      label="是否於離開時反向播放"
+      label="Mirror"
       checked={mirror}
       onChangeValue={setMirror}
     />

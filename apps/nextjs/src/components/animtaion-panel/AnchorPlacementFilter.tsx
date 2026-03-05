@@ -13,7 +13,7 @@ export default function AnchorPlacementFilter() {
 
   return (
     <TwoLevelSelect
-      label="動畫錨點"
+      label="Anchor Placement"
       categories={categories}
       enums={anchorPlacements}
       value={anchorPlacement}
