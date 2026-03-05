@@ -2,11 +2,10 @@
 
 import { type ComponentPropsWithoutRef, createElement } from "react";
 
-import useAOSScope from "@/hooks/useAOSScope";
+import useAOSScope, { type UseAOSScopeOptions } from "@/hooks/useAOSScope";
 import isBlockElementTag, {
   type BlockElementTag,
 } from "@/utils/isBlockElementTag";
-import { type AOSAttributeOptions } from "@/utils/toAOSProps";
 
 type AOSProviderProps<T extends BlockElementTag> = {
   /**
@@ -24,7 +23,7 @@ type AOSProviderProps<T extends BlockElementTag> = {
    *
    * > 注意：預設選項只作用於後續生成的動畫，這是刻意設計的行為。
    */
-  options?: AOSAttributeOptions;
+  options?: UseAOSScopeOptions;
 } & ComponentPropsWithoutRef<T>;
 
 /**

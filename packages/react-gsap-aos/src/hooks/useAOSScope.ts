@@ -8,6 +8,8 @@ import type { AnimationOptions, AOSAttributeKey } from "@/types";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
+export type UseAOSScopeOptions = Partial<AnimationOptions>;
+
 /** AOS 屬性 */
 const AOS_ATTRIBUTE_KEYS: (AOSAttributeKey | "data-aos")[] = [
   "data-aos",
@@ -46,7 +48,7 @@ const AOS_SELECTORS = "[data-aos]";
  */
 export default function useAOSScope<E extends HTMLElement = HTMLElement>(
   /** 預設動畫選項 */
-  options?: Partial<AnimationOptions>,
+  options?: UseAOSScopeOptions,
 ) {
   const containerRef = useRef<E | null>(null);
   const observerRef = useRef<MutationObserver | null>(null);
@@ -80,19 +82,19 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
       };
 
       /** 移除動畫 */
-      const removeAnimation = (element: HTMLElement) => {
+      function removeAnimation(element: HTMLElement) {
         const animation = animationsWeakMap.current.get(element);
         if (!animation) return;
 
         animation.revert();
         animationsWeakMap.current.delete(element);
-      };
+      }
 
       /** 更新動畫 */
-      const updateAnimation = (element: HTMLElement) => {
+      function updateAnimation(element: HTMLElement) {
         removeAnimation(element);
         addAnimation(element);
-      };
+      }
 
       /** 監聽元素變化 */
       const handleMutation: MutationCallback = (mutations) => {
