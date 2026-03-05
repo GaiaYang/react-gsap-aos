@@ -65,6 +65,7 @@ function createScrollTriggerTween(
       overwrite: "auto",
       scrollTrigger: {
         // markers: true,
+        invalidateOnRefresh: true,
         trigger: container || element,
         toggleActions: resolveToggleActions(once, mirror),
         start: resolveScrollTriggerStart(anchorPlacement, offset),

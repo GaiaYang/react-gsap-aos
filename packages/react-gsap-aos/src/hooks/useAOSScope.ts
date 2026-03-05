@@ -1,11 +1,12 @@
 import { useLayoutEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import createAnimation from "@/animation/createAnimation";
 import type { AnimationOptions, AOSAttributeKey } from "@/types";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /** AOS 屬性 */
 const AOS_ATTRIBUTE_KEYS: (AOSAttributeKey | "data-aos")[] = [
@@ -54,6 +55,7 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
     new WeakMap(),
   );
   const optionsRef = useRef(options);
+  const shouldRefresh = useRef(false);
 
   // 使用靜態寫入，下次新增動畫才會套用覆蓋預設值
   useLayoutEffect(() => {
@@ -82,7 +84,7 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         const animation = animationsWeakMap.current.get(element);
         if (!animation) return;
 
-        animation.kill().revert();
+        animation.revert();
         animationsWeakMap.current.delete(element);
       };
 
@@ -99,28 +101,32 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         const updatedElements = new Set<HTMLElement>();
 
         for (const mutation of mutations) {
-          if (
-            mutation.type === "attributes" &&
-            mutation.target instanceof HTMLElement
-          ) {
-            updatedElements.add(mutation.target);
-          } else if (mutation.type === "childList") {
-            collectElements(mutation.addedNodes, addedElements);
-            collectElements(mutation.removedNodes, removedElements);
+          const { type, target, addedNodes, removedNodes, attributeName } =
+            mutation;
+
+          if (type === "attributes" && target instanceof HTMLElement) {
+            updatedElements.add(target);
+
+            // 會影響觸發點的才開啟刷新
+            if (
+              attributeName === "data-aos-anchor-placement" ||
+              attributeName === "data-aos-offset"
+            ) {
+              shouldRefresh.current = true;
+            }
+          } else if (type === "childList") {
+            collectElements(addedNodes, addedElements);
+            collectElements(removedNodes, removedElements);
           }
         }
 
-        // 移除 => 新增 => 更新，避免重複初始化
-        for (const element of removedElements) {
-          removeAnimation(element);
-        }
+        // 移除 => 新增 => 更新
+        for (const element of removedElements) removeAnimation(element);
+        for (const element of addedElements) addAnimation(element);
+        for (const element of updatedElements) updateAnimation(element);
 
-        for (const element of addedElements) {
-          addAnimation(element);
-        }
-
-        for (const element of updatedElements) {
-          updateAnimation(element);
+        if (addedElements.size > 0 || removedElements.size > 0) {
+          shouldRefresh.current = true;
         }
       };
 
@@ -132,6 +138,20 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         addAnimation(element);
       }
 
+      /**
+       * ScrollTrigger 刷新
+       *
+       * > `ScrollTrigger.refresh()` 會導致無限觸發滾動事件、攔截 `window.scroll`
+       *
+       * > MutationObserver 變化後才會重新開啟避免無限刷新
+       * */
+      function updateScrollTrigger() {
+        if (!shouldRefresh.current) return;
+        ScrollTrigger.refresh();
+        shouldRefresh.current = false;
+      }
+
+      window.addEventListener("scroll", updateScrollTrigger);
       observerRef.current = new MutationObserver(handleMutation);
       observerRef.current.observe(containerRef.current, {
         childList: true,
@@ -141,6 +161,8 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
       });
 
       return () => {
+        window.removeEventListener("scroll", updateScrollTrigger);
+
         if (observerRef.current) {
           observerRef.current.disconnect();
           observerRef.current = null;
