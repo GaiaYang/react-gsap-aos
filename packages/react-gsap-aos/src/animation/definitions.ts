@@ -6,6 +6,7 @@ import {
   translate3d,
 } from "./utils/createTweenVars";
 
+/** 動畫配置 */
 export interface AnimationPreset {
   /** 動畫起點 */
   from: gsap.TweenVars;
@@ -13,6 +14,7 @@ export interface AnimationPreset {
   to: gsap.TweenVars;
 }
 
+/** 動畫定義 */
 export interface AnimationDefinitions {
   /** 預設配置 */
   preset: AnimationPreset;

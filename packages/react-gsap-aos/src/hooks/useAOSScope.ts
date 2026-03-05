@@ -44,6 +44,7 @@ const AOS_SELECTORS = "[data-aos]";
  * ```
  */
 export default function useAOSScope<E extends HTMLElement = HTMLElement>(
+  /** 預設動畫選項 */
   options?: Partial<AnimationOptions>,
 ) {
   const containerRef = useRef<E | null>(null);

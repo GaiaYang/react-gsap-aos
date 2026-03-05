@@ -202,7 +202,7 @@ import { toAOSProps } from "react-gsap-aos";
 </AOSProvider>
 ```
 
-> 預設選項只會作用在後續生成的動畫，這是有意為之的行為
+> 注意：預設選項只作用於後續生成的動畫，這是刻意設計的行為。
 
 ### useAOSScope
 
