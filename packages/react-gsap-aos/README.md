@@ -168,7 +168,7 @@ Nested containers are supported:
   <div data-aos="fade-up">Parent animation</div>
 
   <div data-aos-container>
-    <div data-aos="fade-up">Nested animation</div>
+    <div data-aos="zoom-in">Nested animation</div>
   </div>
 </div>
 ```
@@ -266,6 +266,21 @@ function Section2() {
 }
 ```
 
+### toAOSProps
+
+Converts animation options to data attributes with type safety.
+
+```tsx
+import { toAOSProps } from "react-gsap-aos";
+
+const props = toAOSProps({
+  animation: "fade-up",
+  duration: 600,
+  easing: "power2.out",
+});
+// Returns: { "data-aos": "fade-up", "data-aos-duration": 600, ... }
+```
+
 ### refreshAOS
 
 Manually refresh ScrollTrigger calculations when DOM changes occur.
@@ -307,21 +322,6 @@ export default function DynamicList() {
     </AOSProvider>
   );
 }
-```
-
-### toAOSProps
-
-Converts animation options to data attributes with type safety.
-
-```tsx
-import { toAOSProps } from "react-gsap-aos";
-
-const props = toAOSProps({
-  animation: "fade-up",
-  duration: 600,
-  easing: "power2.out",
-});
-// Returns: { "data-aos": "fade-up", "data-aos-duration": 600, ... }
 ```
 
 ## Animation Options

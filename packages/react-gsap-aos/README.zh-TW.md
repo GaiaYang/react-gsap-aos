@@ -166,7 +166,7 @@ import { toAOSProps } from "react-gsap-aos";
   <div data-aos="fade-up">父層動畫</div>
 
   <div data-aos-container>
-    <div data-aos="fade-up">巢狀動畫</div>
+    <div data-aos="zoom-in">巢狀動畫</div>
   </div>
 </div>
 ```
@@ -264,6 +264,21 @@ function Section2() {
 }
 ```
 
+### toAOSProps
+
+將動畫選項轉換為 data 屬性，具有型別安全。
+
+```tsx
+import { toAOSProps } from "react-gsap-aos";
+
+const props = toAOSProps({
+  animation: "fade-up",
+  duration: 600,
+  easing: "power2.out",
+});
+// 回傳：{ "data-aos": "fade-up", "data-aos-duration": 600, ... }
+```
+
 ### refreshAOS
 
 當 DOM 變更時手動刷新 ScrollTrigger 計算。
@@ -307,21 +322,6 @@ export default function DynamicList() {
 }
 ```
 
-### toAOSProps
-
-將動畫選項轉換為 data 屬性，具有型別安全。
-
-```tsx
-import { toAOSProps } from "react-gsap-aos";
-
-const props = toAOSProps({
-  animation: "fade-up",
-  duration: 600,
-  easing: "power2.out",
-});
-// 回傳：{ "data-aos": "fade-up", "data-aos-duration": 600, ... }
-```
-
 ## 動畫選項
 
 | 選項              | 型別              | Data 屬性                   | 預設值         | 說明                   |
@@ -333,7 +333,7 @@ const props = toAOSProps({
 | `easing`          | `Easing`          | `data-aos-easing`           | `"none"`       | 緩動函式               |
 | `once`            | `boolean`         | `data-aos-once`             | `false`        | 只執行一次動畫         |
 | `mirror`          | `boolean`         | `data-aos-mirror`           | `false`        | 向上捲動時反轉動畫     |
-| `anchorPlacement` | `AnchorPlacement` | `data-aos-anchor-placement` | `"top-bottom"` | 觸發位置               |
+| `anchorPlacement` | `AnchorPlacement` | `data-aos-anchor-placement` | `"top-bottom"` | 錨點位置               |
 
 ## 可用型別
 

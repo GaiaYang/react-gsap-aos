@@ -14,11 +14,11 @@
 # 安裝相依套件
 pnpm install
 
-# 建置函式庫
+# 建置套件庫
 cd packages/react-gsap-aos
 pnpm build
 
-# 執行展示應用程式
+# 執行展示網站
 cd apps/nextjs
 pnpm dev
 ```
@@ -60,7 +60,7 @@ react-gsap-aos/
 ```bash
 cd packages/react-gsap-aos
 pnpm build    # 正式版建置
-pnpm dev      # 監看模式
+pnpm dev      # 監聽模式
 ```
 
 ## 授權

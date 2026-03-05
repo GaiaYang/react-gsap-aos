@@ -12,43 +12,32 @@ export default function mergeOptions(
     if (!options) continue;
 
     for (const key of Object.keys(options) as (keyof AnimationOptions)[]) {
+      const value = options[key];
+
       switch (key) {
         case "offset":
         case "delay":
-        case "duration": {
-          const value = options[key];
-          if (
-            typeof value === "number" &&
-            !Number.isNaN(value) &&
-            Number.isFinite(value) &&
-            Number.isInteger(value)
-          ) {
+        case "duration":
+          if (typeof value === "number" && Number.isInteger(value)) {
             result[key] = value;
           }
           break;
-        }
-        case "easing": {
-          const value = options[key];
-          if (verifyEnum(easings, value)) {
-            result[key] = value;
-          }
-          break;
-        }
         case "once":
-        case "mirror": {
-          const value = options[key];
+        case "mirror":
           if (typeof value === "boolean") {
             result[key] = value;
           }
           break;
-        }
-        case "anchorPlacement": {
-          const value = options[key];
+        case "easing":
+          if (verifyEnum(easings, value)) {
+            result[key] = value;
+          }
+          break;
+        case "anchorPlacement":
           if (verifyEnum(anchorPlacements, value)) {
             result[key] = value;
           }
           break;
-        }
         default:
           break;
       }
@@ -59,5 +48,5 @@ export default function mergeOptions(
 }
 
 function verifyEnum<T>(list: readonly T[], value: unknown): value is T {
-  return Boolean(value && list.includes(value as T));
+  return list.includes(value as T);
 }

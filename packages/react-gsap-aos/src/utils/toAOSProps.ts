@@ -10,8 +10,12 @@ export interface AOSAttributeOptions extends Partial<AnimationOptions> {
 }
 
 /** 將 options 轉成可直接使用的 AOS data attributes */
-export default function toAOSProps(options: AOSAttributeOptions) {
-  const attrs: AOSDataAttributes = {
+export default function toAOSProps(
+  options?: AOSAttributeOptions,
+): Partial<AOSDataAttributes> {
+  if (!options) return {};
+
+  return omitNil({
     "data-aos": options.animation,
     "data-aos-offset": toNumberAttr(options.offset),
     "data-aos-delay": toNumberAttr(options.delay),
@@ -23,9 +27,7 @@ export default function toAOSProps(options: AOSAttributeOptions) {
       anchorPlacements,
       options.anchorPlacement,
     ),
-  };
-
-  return omitNil(attrs);
+  } satisfies AOSDataAttributes);
 }
 
 function omitNil<T extends object>(obj: T): Partial<T> {
@@ -37,7 +39,7 @@ function omitNil<T extends object>(obj: T): Partial<T> {
     const key = keys[i];
     const value = obj[key];
 
-    if (value !== undefined && value !== null) {
+    if (value != null) {
       result[key] = value;
     }
   }
@@ -50,12 +52,7 @@ function toBooleanAttr(value?: boolean) {
 }
 
 function toNumberAttr(value?: number) {
-  return typeof value === "number" &&
-    !Number.isNaN(value) &&
-    Number.isFinite(value) &&
-    Number.isInteger(value)
-    ? String(value)
-    : undefined;
+  return Number.isInteger(value) ? String(value) : undefined;
 }
 
 function validateEnumValue<T>(list: readonly T[], value: T) {

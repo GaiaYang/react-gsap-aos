@@ -26,20 +26,12 @@ export default function parseAttributes<E extends Element>(element: E) {
       switch (prop) {
         case "offset":
         case "delay":
-        case "duration": {
+        case "duration":
           const numberValue = parseNumber(value);
-          if (!Number.isNaN(numberValue) && Number.isFinite(numberValue)) {
+          if (Number.isInteger(numberValue)) {
             options[prop] = numberValue;
           }
           break;
-        }
-        case "easing": {
-          const easing = parseEnum(easings, value);
-          if (easing) {
-            options[prop] = easing;
-          }
-          break;
-        }
         case "once":
         case "mirror": {
           const booleanValue = parseBoolean(value);
@@ -48,6 +40,12 @@ export default function parseAttributes<E extends Element>(element: E) {
           }
           break;
         }
+        case "easing":
+          const easing = parseEnum(easings, value);
+          if (easing) {
+            options[prop] = easing;
+          }
+          break;
         case "anchorPlacement": {
           const anchorPlacement = parseEnum(anchorPlacements, value);
           if (anchorPlacement) {
@@ -62,7 +60,10 @@ export default function parseAttributes<E extends Element>(element: E) {
   return options;
 }
 
-function parseEnum<T>(list: readonly T[], value: string): T | undefined {
+function parseEnum<T extends string>(
+  list: readonly T[],
+  value: string,
+): T | undefined {
   return list.includes(value as T) ? (value as T) : undefined;
 }
 
@@ -73,10 +74,11 @@ function parseBoolean(value: string) {
     case "false":
       return false;
     default:
-      break;
+      return undefined;
   }
 }
 
 function parseNumber(value: string) {
-  return parseInt(value, 10);
+  const num = Number(value);
+  return Number.isInteger(num) ? num : undefined;
 }

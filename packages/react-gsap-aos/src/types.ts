@@ -1,7 +1,7 @@
 /** 動畫選項 */
 export interface AnimationOptions {
   /**
-   * 提前觸發動畫的距離 (px)
+   * 從觸發點的偏移量 (px)
    *
    * @default 120
    */
@@ -27,19 +27,19 @@ export interface AnimationOptions {
    */
   easing: Easing;
   /**
-   * 是否只執行一次
+   * 只執行一次動畫
    *
    * @default false
    */
   once: boolean;
   /**
-   * 是否於離開時反向播放
+   * 向上捲動時反轉動畫
    *
    * @default false
    */
   mirror: boolean;
   /**
-   * 觸發位置設定
+   * 錨點位置
    *
    * @default "top-bottom"
    *
@@ -90,7 +90,7 @@ export type Animation =
   | SlideAnimation
   | ZoomAnimation;
 
-/** 動畫錨點 */
+/** 錨點位置 */
 export type AnchorPlacement =
   | "top-bottom"
   | "top-center"
@@ -102,7 +102,7 @@ export type AnchorPlacement =
   | "bottom-center"
   | "bottom-top";
 
-/** 動畫曲線 */
+/** 緩動曲線 */
 export type Easing =
   | "none"
   | "power1"

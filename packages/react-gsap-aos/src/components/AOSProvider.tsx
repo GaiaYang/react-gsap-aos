@@ -27,7 +27,7 @@ export default function AOSProvider<T extends ElementType = "div">({
     typeof component === "string" ? component : "div",
     {
       ...props,
-      ...(options ? toAOSProps(options) : undefined),
+      ...toAOSProps(options),
       ref: containerRef,
     },
     children,
