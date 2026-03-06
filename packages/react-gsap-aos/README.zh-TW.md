@@ -28,7 +28,7 @@
 - TypeScript 支援有限
 - 難以處理動態內容
 
-`react-gsap-aos` 透過提供 React 原生解決方案來解決這些問題，自動處理 DOM 變更、元件生命週期和 SSR 場景。
+`react-gsap-aos` 透過 React 來解決這些問題，自動處理 DOM 變更、元件生命週期和 SSR 場景。
 
 ## 功能特色
 
@@ -279,17 +279,15 @@ const props = toAOSProps({
 // 回傳：{ "data-aos": "fade-up", "data-aos-duration": 600, ... }
 ```
 
-### refreshAOS
+### refreshScrollTrigger
 
-手動刷新 AOS 動畫位置（目前封裝自 `ScrollTrigger.refresh`）。
-
-> ⚠️ 注意：目前行為與 GSAP 原生 `ScrollTrigger.refresh` 相同，名稱封裝是為了統一 API 與未來可擴展額外邏輯。
+手動刷新 AOS 動畫位置，封裝自 [`ScrollTrigger.refresh`](<https://gsap.com/docs/v3/Plugins/ScrollTrigger/refresh()>)
 
 ```tsx
-import { refreshAOS } from "react-gsap-aos";
+import { refreshScrollTrigger } from "react-gsap-aos";
 
 // 在動態 DOM 變更後呼叫
-refreshAOS();
+refreshScrollTrigger();
 ```
 
 **動態內容範例：**
@@ -336,6 +334,7 @@ export default function DynamicList() {
 | `once`            | `boolean`         | `data-aos-once`             | `false`        | 只執行一次動畫         |
 | `mirror`          | `boolean`         | `data-aos-mirror`           | `false`        | 向上捲動時反轉動畫     |
 | `anchorPlacement` | `AnchorPlacement` | `data-aos-anchor-placement` | `"top-bottom"` | 錨點位置               |
+| `markers`         | `boolean`         | `data-aos-markers`          | `false`        | ScrollTrigger 標記     |
 
 ## 可用型別
 

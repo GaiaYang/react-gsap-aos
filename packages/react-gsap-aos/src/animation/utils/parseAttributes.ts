@@ -11,6 +11,7 @@ const AOS_ATTRIBUTE_MAP = {
   "data-aos-mirror": "mirror",
   "data-aos-once": "once",
   "data-aos-anchor-placement": "anchorPlacement",
+  "data-aos-markers": "markers",
 } satisfies Record<AOSAttributeKey, keyof AnimationOptions>;
 
 /** 解析動畫屬性 */
@@ -33,26 +34,25 @@ export default function parseAttributes<E extends Element>(element: E) {
           }
           break;
         case "once":
-        case "mirror": {
+        case "mirror":
+        case "markers":
           const booleanValue = parseBoolean(value);
           if (typeof booleanValue === "boolean") {
             options[prop] = booleanValue;
           }
           break;
-        }
         case "easing":
           const easing = parseEnum(easings, value);
           if (easing) {
             options[prop] = easing;
           }
           break;
-        case "anchorPlacement": {
+        case "anchorPlacement":
           const anchorPlacement = parseEnum(anchorPlacements, value);
           if (anchorPlacement) {
             options[prop] = anchorPlacement;
           }
           break;
-        }
       }
     }
   }

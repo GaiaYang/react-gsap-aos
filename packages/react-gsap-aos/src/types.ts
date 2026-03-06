@@ -46,6 +46,14 @@ export interface AnimationOptions {
    * @see https://gsap.com/docs/v3/Plugins/ScrollTrigger/#start
    */
   anchorPlacement: AnchorPlacement;
+  /**
+   * 開啟 GSAP 標記模式
+   *
+   * > 此選項開啟會造成效能問題，僅提供開發使用
+   *
+   * @default false
+   * */
+  markers: boolean;
 }
 
 export type FadeAnimation =
@@ -153,7 +161,8 @@ type AttributeKey =
   | "easing"
   | "once"
   | "mirror"
-  | "anchor-placement";
+  | "anchor-placement"
+  | "markers";
 
 /** AOS 屬性 */
 export type AOSAttributeKey = `data-aos-${AttributeKey}`;

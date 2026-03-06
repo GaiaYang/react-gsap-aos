@@ -9,6 +9,7 @@ export const DEFAULT_OPTIONS: AnimationOptions = {
   once: false,
   mirror: false,
   anchorPlacement: "top-bottom",
+  markers: false,
 };
 
 /** 動畫曲線 */

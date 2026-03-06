@@ -24,6 +24,7 @@ export default function mergeOptions(
           break;
         case "once":
         case "mirror":
+        case "markers":
           if (typeof value === "boolean") {
             result[key] = value;
           }

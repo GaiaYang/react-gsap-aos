@@ -20,6 +20,7 @@ const AOS_ATTRIBUTE_KEYS: (AOSAttributeKey | "data-aos")[] = [
   "data-aos-mirror",
   "data-aos-once",
   "data-aos-anchor-placement",
+  "data-aos-markers",
 ];
 /** AOS 屬性名稱 */
 const AOS_QUALIFIED_NAME = "data-aos";
@@ -109,21 +110,12 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         const updatedElements = new Set<HTMLElement>();
 
         for (const mutation of mutations) {
-          const { type, target, addedNodes, removedNodes, attributeName } =
-            mutation;
+          const { type, target, addedNodes, removedNodes } = mutation;
 
           if (type === "attributes" && target instanceof HTMLElement) {
             // 沒有指定 'data-aos' 就不處理相關邏輯
             if (!target.hasAttribute(AOS_QUALIFIED_NAME)) continue;
             updatedElements.add(target);
-
-            // 會影響觸發點的才開啟刷新
-            if (
-              attributeName === "data-aos-anchor-placement" ||
-              attributeName === "data-aos-offset"
-            ) {
-              shouldRefreshRef.current = true;
-            }
           } else if (type === "childList") {
             collectElements(addedNodes, addedElements);
             collectElements(removedNodes, removedElements);

@@ -27,6 +27,7 @@ export default function toAOSProps(
       anchorPlacements,
       options.anchorPlacement,
     ),
+    "data-aos-markers": toBooleanAttr(options.markers),
   } satisfies AOSDataAttributes);
 }
 

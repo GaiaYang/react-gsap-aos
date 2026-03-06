@@ -28,7 +28,7 @@ While AOS is great for vanilla JavaScript, integrating it with React can be prob
 - Limited TypeScript support
 - Difficult to use with dynamic content
 
-`react-gsap-aos` solves these issues by providing a React-native solution that automatically handles DOM mutations, component lifecycle, and SSR scenarios.
+`react-gsap-aos` by React solution that automatically handles DOM mutations, component lifecycle, and SSR scenarios.
 
 ## Features
 
@@ -281,17 +281,15 @@ const props = toAOSProps({
 // Returns: { "data-aos": "fade-up", "data-aos-duration": 600, ... }
 ```
 
-### refreshAOS
+### refreshScrollTrigger
 
-Manually refresh AOS animation positions (currently a wrapper around `ScrollTrigger.refresh`).
-
-> ⚠️ Note: The current behavior is identical to GSAP's native `ScrollTrigger.refresh`. The wrapper exists to unify the API and allow future custom logic.
+Manually refresh AOS animation positions, wrapper around [`ScrollTrigger.refresh`](<https://gsap.com/docs/v3/Plugins/ScrollTrigger/refresh()>).
 
 ```tsx
-import { refreshAOS } from "react-gsap-aos";
+import { refreshScrollTrigger } from "react-gsap-aos";
 
 // Call after dynamic DOM changes
-refreshAOS();
+refreshScrollTrigger();
 ```
 
 **Example with Dynamic Content:**
@@ -338,6 +336,7 @@ export default function DynamicList() {
 | `once`            | `boolean`         | `data-aos-once`             | `false`        | Animate only once              |
 | `mirror`          | `boolean`         | `data-aos-mirror`           | `false`        | Reverse animation on scroll up |
 | `anchorPlacement` | `AnchorPlacement` | `data-aos-anchor-placement` | `"top-bottom"` | Trigger position               |
+| `markers`         | `boolean`         | `data-aos-markers`          | `false`        | ScrollTrigger markers          |
 
 ## Available Types
 

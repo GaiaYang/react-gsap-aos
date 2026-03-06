@@ -8,5 +8,5 @@ export type {
   SlideAnimation,
   ZoomAnimation,
 } from "./types";
-export { default as refreshAOS } from "./utils/refreshAOS";
+export { default as refreshScrollTrigger } from "./utils/refreshScrollTrigger";
 export { default as toAOSProps } from "./utils/toAOSProps";

@@ -46,8 +46,16 @@ function createScrollTriggerTween(
 ) {
   const { from, to } = vars;
   const { parentElement } = element;
-  const { offset, delay, duration, easing, once, mirror, anchorPlacement } =
-    mergeOptions(options);
+  const {
+    offset,
+    delay,
+    duration,
+    easing,
+    once,
+    mirror,
+    anchorPlacement,
+    markers,
+  } = mergeOptions(options);
 
   return gsap.fromTo(
     element,
@@ -63,7 +71,7 @@ function createScrollTriggerTween(
       delay: delay / UNIT_MS,
       overwrite: "auto",
       scrollTrigger: {
-        // markers: true,
+        markers,
         invalidateOnRefresh: true,
         // 優先使用上一層被標記的動畫容器
         trigger: parentElement?.hasAttribute("data-aos-container")
