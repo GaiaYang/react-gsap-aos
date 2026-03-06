@@ -6,6 +6,7 @@ import { toAOSProps } from "react-gsap-aos";
 import ColorBox from "@/components/ColorBox";
 
 import useDynamicOptions from "./useDynamicOptions";
+import { InfoIcon } from "lucide-react";
 
 const list = [50, 100, 150, 200];
 
@@ -16,19 +17,7 @@ export default function LargeCountAnimations() {
   return (
     <>
       <div role="alert" className="alert">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          className="stroke-info h-6 w-6 shrink-0"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          ></path>
-        </svg>
+        <InfoIcon className="text-info" />
         <span>此區塊沒有使用虛擬化列表</span>
       </div>
       <fieldset className="fieldset">

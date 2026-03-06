@@ -1,4 +1,5 @@
 import { atom, useAtom, useAtomValue } from "jotai";
+import { InfoIcon } from "lucide-react";
 import { animations } from "react-gsap-aos/constants";
 
 import { animationAtom } from "@/jotai/animation";
@@ -24,19 +25,7 @@ export default function AnimationFilter() {
     <Container>
       {invalid ? (
         <div role="alert" className="alert col-span-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="stroke-info h-6 w-6 shrink-0"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
+          <InfoIcon className="text-info" />
           <span>此修改不會生效於該範例</span>
         </div>
       ) : null}

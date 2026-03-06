@@ -9,17 +9,14 @@ import TabPanel from "./components/TabPanel";
 export default function Home() {
   return (
     <Provider>
-      <AOSProvider
-        component="main"
-        className="relative flex flex-col gap-4 p-4"
-      >
+      <AOSProvider component="main" className="flex flex-col gap-4 py-4 *:px-4">
         <Tabs />
         <TabPanel />
-        <div className="fixed right-4 bottom-4 z-1 flex flex-col gap-4">
-          <MenuDialogButton />
-          <ToTopButton />
-        </div>
       </AOSProvider>
+      <div className="fixed right-4 bottom-4 flex flex-col gap-4">
+        <MenuDialogButton />
+        <ToTopButton />
+      </div>
       <MenuDialog />
     </Provider>
   );

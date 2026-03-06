@@ -1,5 +1,7 @@
 "use client";
 
+import { Settings2Icon, XIcon } from "lucide-react";
+
 import AnimationPanel from "@/components/animtaion-panel/AnimationPanel";
 
 export const MENU_DIALOG_ID = "menu-dialog";
@@ -18,20 +20,7 @@ export function MenuDialog() {
             onClick={closeDialog}
             className="btn btn-circle btn-error"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
+            <XIcon />
           </button>
         </div>
         <AnimationPanel />
@@ -52,22 +41,7 @@ export function MenuDialogButton() {
       }}
       className="btn btn-circle btn-xl btn-primary"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M14 17H5" />
-        <path d="M19 7h-9" />
-        <circle cx="17" cy="17" r="3" />
-        <circle cx="7" cy="7" r="3" />
-      </svg>
+      <Settings2Icon />
     </button>
   );
 }

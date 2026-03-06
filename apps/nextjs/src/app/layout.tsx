@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   },
   description:
     "A lightweight GSAP + ScrollTrigger integration, similar in usage to AOS, specifically designed for React / Next.js.",
+  metadataBase: new URL("https://react-gsap-aos-nextjs.vercel.app"),
 };
 
 export default function RootLayout({
