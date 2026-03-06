@@ -34,6 +34,9 @@ function resolveToggleActions(once?: boolean, mirror?: boolean): string {
   return "play none none reverse";
 }
 
+/** 毫秒單位 */
+const UNIT_MS = 1000;
+
 /** 建立 ScrollTrigger 動畫 */
 function createScrollTriggerTween(
   element: HTMLElement,
@@ -42,13 +45,9 @@ function createScrollTriggerTween(
   options?: Partial<AnimationOptions>,
 ) {
   const { from, to } = vars;
+  const { parentElement } = element;
   const { offset, delay, duration, easing, once, mirror, anchorPlacement } =
     mergeOptions(options);
-
-  /** 上層基準容器 */
-  const container = element.parentElement?.hasAttribute("data-aos-container")
-    ? element.parentElement
-    : null;
 
   return gsap.fromTo(
     element,
@@ -60,13 +59,16 @@ function createScrollTriggerTween(
       ...preset.to,
       ...to,
       ease: easing,
-      duration: duration / 1000,
-      delay: delay / 1000,
+      duration: duration / UNIT_MS,
+      delay: delay / UNIT_MS,
       overwrite: "auto",
       scrollTrigger: {
         // markers: true,
         invalidateOnRefresh: true,
-        trigger: container || element,
+        // 優先使用上一層被標記的動畫容器
+        trigger: parentElement?.hasAttribute("data-aos-container")
+          ? parentElement
+          : element,
         toggleActions: resolveToggleActions(once, mirror),
         start: resolveScrollTriggerStart(anchorPlacement, offset),
       },

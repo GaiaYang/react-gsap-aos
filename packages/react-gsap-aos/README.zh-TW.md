@@ -202,7 +202,7 @@ import { toAOSProps } from "react-gsap-aos";
 </AOSProvider>
 ```
 
-> 注意：預設選項只作用於後續生成的動畫，這是刻意設計的行為。
+> ⚠️ 注意：預設選項只作用於後續生成的動畫，這是刻意設計的行為。
 
 ### useAOSScope
 
@@ -281,7 +281,9 @@ const props = toAOSProps({
 
 ### refreshAOS
 
-當 DOM 變更時手動刷新 ScrollTrigger 計算。
+手動刷新 AOS 動畫位置（目前封裝自 `ScrollTrigger.refresh`）。
+
+> ⚠️ 注意：目前行為與 GSAP 原生 `ScrollTrigger.refresh` 相同，名稱封裝是為了統一 API 與未來可擴展額外邏輯。
 
 ```tsx
 import { refreshAOS } from "react-gsap-aos";

@@ -283,7 +283,9 @@ const props = toAOSProps({
 
 ### refreshAOS
 
-Manually refresh ScrollTrigger calculations when DOM changes occur.
+Manually refresh AOS animation positions (currently a wrapper around `ScrollTrigger.refresh`).
+
+> ⚠️ Note: The current behavior is identical to GSAP's native `ScrollTrigger.refresh`. The wrapper exists to unify the API and allow future custom logic.
 
 ```tsx
 import { refreshAOS } from "react-gsap-aos";

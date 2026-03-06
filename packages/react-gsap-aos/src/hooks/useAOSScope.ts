@@ -21,9 +21,10 @@ const AOS_ATTRIBUTE_KEYS: (AOSAttributeKey | "data-aos")[] = [
   "data-aos-once",
   "data-aos-anchor-placement",
 ];
-
+/** AOS 屬性名稱 */
+const AOS_QUALIFIED_NAME = "data-aos";
 /** AOS 選擇器 */
-const AOS_SELECTORS = "[data-aos]";
+const AOS_SELECTORS = `[${AOS_QUALIFIED_NAME}]`;
 
 /**
  * 綁定 AOS 動畫範圍
@@ -53,15 +54,16 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
   const containerRef = useRef<E | null>(null);
   const observerRef = useRef<MutationObserver | null>(null);
   /** 記錄每個元素對應的動畫實例 */
-  const animationsWeakMap = useRef<WeakMap<HTMLElement, gsap.core.Tween>>(
+  const elementAnimationsRef = useRef<WeakMap<HTMLElement, gsap.core.Tween>>(
     new WeakMap(),
   );
-  const optionsRef = useRef(options);
-  const shouldRefresh = useRef(false);
+  const currentOptionsRef = useRef(options);
+  const rafIdRef = useRef<number>(0);
+  const shouldRefreshRef = useRef(false);
 
-  // 使用靜態寫入，下次新增動畫才會套用覆蓋預設值
+  // 下次新增動畫才會套用覆蓋預設值
   useLayoutEffect(() => {
-    optionsRef.current = options;
+    currentOptionsRef.current = options;
   }, [options]);
 
   useGSAP(
@@ -70,31 +72,35 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
 
       /** 新增動畫 */
       const addAnimation = (element: HTMLElement) => {
-        if (animationsWeakMap.current.has(element)) return;
+        const elementAnimations = elementAnimationsRef.current;
+
+        if (elementAnimations.has(element)) return;
 
         const newAnimation = contextSafe(createAnimation)(
           element,
-          optionsRef.current,
+          currentOptionsRef.current,
         );
         if (!newAnimation) return;
 
-        animationsWeakMap.current.set(element, newAnimation);
+        elementAnimations.set(element, newAnimation);
       };
 
       /** 移除動畫 */
-      function removeAnimation(element: HTMLElement) {
-        const animation = animationsWeakMap.current.get(element);
+      const removeAnimation = (element: HTMLElement) => {
+        const elementAnimations = elementAnimationsRef.current;
+
+        const animation = elementAnimations.get(element);
         if (!animation) return;
 
         animation.revert();
-        animationsWeakMap.current.delete(element);
-      }
+        elementAnimations.delete(element);
+      };
 
       /** 更新動畫 */
-      function updateAnimation(element: HTMLElement) {
+      const updateAnimation = (element: HTMLElement) => {
         removeAnimation(element);
         addAnimation(element);
-      }
+      };
 
       /** 監聽元素變化 */
       const handleMutation: MutationCallback = (mutations) => {
@@ -107,6 +113,8 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
             mutation;
 
           if (type === "attributes" && target instanceof HTMLElement) {
+            // 沒有指定 'data-aos' 就不處理相關邏輯
+            if (!target.hasAttribute(AOS_QUALIFIED_NAME)) continue;
             updatedElements.add(target);
 
             // 會影響觸發點的才開啟刷新
@@ -114,7 +122,7 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
               attributeName === "data-aos-anchor-placement" ||
               attributeName === "data-aos-offset"
             ) {
-              shouldRefresh.current = true;
+              shouldRefreshRef.current = true;
             }
           } else if (type === "childList") {
             collectElements(addedNodes, addedElements);
@@ -128,8 +136,25 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         for (const element of updatedElements) updateAnimation(element);
 
         if (addedElements.size > 0 || removedElements.size > 0) {
-          shouldRefresh.current = true;
+          shouldRefreshRef.current = true;
         }
+      };
+
+      /**
+       * ScrollTrigger 刷新
+       *
+       * > `ScrollTrigger.refresh()` 會導致無限觸發滾動事件、攔截 `window.scroll`
+       *
+       * > MutationObserver 變化後才會重新開啟避免無限刷新
+       * */
+      const updateScrollTrigger = () => {
+        if (!shouldRefreshRef.current || rafIdRef.current) return;
+
+        rafIdRef.current = requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+          shouldRefreshRef.current = false;
+          rafIdRef.current = 0;
+        });
       };
 
       // 初始化
@@ -140,20 +165,7 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         addAnimation(element);
       }
 
-      /**
-       * ScrollTrigger 刷新
-       *
-       * > `ScrollTrigger.refresh()` 會導致無限觸發滾動事件、攔截 `window.scroll`
-       *
-       * > MutationObserver 變化後才會重新開啟避免無限刷新
-       * */
-      function updateScrollTrigger() {
-        if (!shouldRefresh.current) return;
-        ScrollTrigger.refresh();
-        shouldRefresh.current = false;
-      }
-
-      window.addEventListener("scroll", updateScrollTrigger);
+      window.addEventListener("scroll", updateScrollTrigger, { passive: true });
       observerRef.current = new MutationObserver(handleMutation);
       observerRef.current.observe(containerRef.current, {
         childList: true,
@@ -181,7 +193,11 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
 function collectElements(nodes: NodeList, result: Set<HTMLElement>) {
   for (const node of nodes) {
     if (!(node instanceof HTMLElement)) continue;
-    if (node.matches(AOS_SELECTORS)) result.add(node);
+
+    if (node.hasAttribute(AOS_QUALIFIED_NAME)) {
+      result.add(node);
+    }
+
     for (const element of node.querySelectorAll<HTMLElement>(AOS_SELECTORS)) {
       result.add(element);
     }
