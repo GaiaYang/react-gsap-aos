@@ -14,7 +14,7 @@ export function MenuDialog() {
   return (
     <dialog id={MENU_DIALOG_ID} className="modal">
       <div className="modal-box max-w-3xl">
-        <div className="flex justify-end">
+        <div className="mb-4 flex justify-end">
           <button
             type="button"
             onClick={closeDialog}

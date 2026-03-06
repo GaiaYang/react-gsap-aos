@@ -10,16 +10,15 @@ import {
 
 import CheckboxFieldset from "@/components/form/CheckboxFieldset";
 import InputApplyFieldset from "@/components/form/InputApplyFieldset";
-import Container from "./Container";
 
 export default function OtherOptions() {
   return (
-    <Container>
+    <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
       <OffsetInput />
       <DurationInput />
       <OnceCheckbox />
       <MirrorCheckbox />
-    </Container>
+    </div>
   );
 }
 

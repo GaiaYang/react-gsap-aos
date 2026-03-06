@@ -6,7 +6,6 @@ import { animationAtom } from "@/jotai/animation";
 import { tabIndexAtom } from "@/jotai/demo";
 
 import TwoLevelSelect from "@/components/form/TwoLevelSelect";
-import Container from "./Container";
 
 const categories = Array.from(
   new Set(animations.map((item) => item.split("-")[0])),
@@ -22,7 +21,7 @@ export default function AnimationFilter() {
   const invalid = useAtomValue(invalidAtom);
 
   return (
-    <Container>
+    <>
       {invalid ? (
         <div role="alert" className="alert col-span-full">
           <InfoIcon className="text-info" />
@@ -37,6 +36,6 @@ export default function AnimationFilter() {
         value={animation}
         onChangeValue={setAnimation}
       />
-    </Container>
+    </>
   );
 }

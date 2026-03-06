@@ -63,14 +63,12 @@ export default function AnimationPanel() {
 
   return (
     <div>
-      <div className="flex flex-col gap-y-4">
-        <div className="overflow-x-auto">
-          <div role="tablist" className="tabs tabs-border min-w-max">
-            {tabs.map(renderTab)}
-          </div>
+      <div className="mb-4 overflow-x-auto">
+        <div role="tablist" className="tabs tabs-border min-w-max">
+          {tabs.map(renderTab)}
         </div>
-        {renderPanel()}
       </div>
+      {renderPanel()}
       <div className="divider" />
       <CurrentAnimationOptions />
     </div>
