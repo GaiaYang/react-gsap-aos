@@ -30,6 +30,7 @@ function OffsetInput() {
     <InputApplyFieldset
       label="Offset"
       inputProps={{
+        id: "offset",
         type: "number",
         inputMode: "numeric",
       }}
@@ -53,6 +54,7 @@ function DurationInput() {
     <InputApplyFieldset
       label="Duration"
       inputProps={{
+        id: "duration",
         type: "number",
         inputMode: "numeric",
       }}
@@ -72,7 +74,12 @@ function OnceCheckbox() {
   const [once, setOnce] = useAtom(onceAtom);
 
   return (
-    <CheckboxFieldset label="Once" checked={once} onChangeValue={setOnce} />
+    <CheckboxFieldset
+      id="once"
+      label="Once"
+      checked={once}
+      onChangeValue={setOnce}
+    />
   );
 }
 
@@ -81,6 +88,7 @@ function MirrorCheckbox() {
 
   return (
     <CheckboxFieldset
+      id="mirror"
       label="Mirror"
       checked={mirror}
       onChangeValue={setMirror}

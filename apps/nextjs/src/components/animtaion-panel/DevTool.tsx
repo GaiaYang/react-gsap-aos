@@ -30,6 +30,7 @@ function VisibleAnchor() {
 
   return (
     <CheckboxFieldset
+      id="visibleAnchor"
       label="顯示 Anchor Placement 標記"
       checked={visible}
       onChangeValue={setVisible}
@@ -42,6 +43,7 @@ function VisibleOffset() {
 
   return (
     <CheckboxFieldset
+      id="visibleOffset"
       label="顯示 Offset 標記"
       checked={visible}
       onChangeValue={setVisible}

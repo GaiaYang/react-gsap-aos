@@ -13,6 +13,7 @@ export default function EasingFilter() {
 
   return (
     <TwoLevelSelect
+      id="easing"
       label="Easing"
       categories={categories}
       enums={easings}

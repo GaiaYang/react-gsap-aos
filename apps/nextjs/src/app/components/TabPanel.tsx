@@ -7,6 +7,7 @@ import { tabIndexAtom } from "@/jotai/demo";
 import AllAnimations from "./AllAnimations";
 import SingleAnimations from "./SingleAnimations";
 import TypographyAnimations from "./TypographyAnimations";
+import LargeCountAnimations from "./LargeCountAnimations";
 
 import OffsetMarker from "@/components/animtaion-panel/OffsetMarker";
 
@@ -29,6 +30,8 @@ function renderContent(index: number) {
       return <SingleAnimations />;
     case 2:
       return <TypographyAnimations />;
+    case 3:
+      return <LargeCountAnimations />;
     default:
       break;
   }

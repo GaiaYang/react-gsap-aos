@@ -7,7 +7,7 @@ import useDynamicOptions from "./useDynamicOptions";
 import ColorBox from "@/components/ColorBox";
 import AnchorPlacementMarker from "@/components/animtaion-panel/AnchorPlacementMarker";
 
-const list = Array(20).fill(null);
+const list = Array.from({ length: 20 });
 
 export default function SingleAnimations() {
   const options = useDynamicOptions();

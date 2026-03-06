@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export interface TwoLevelSelectProps<T extends string> {
+  id: string;
   label?: string;
   categories: string[];
   enums: T[];
@@ -9,6 +10,7 @@ export interface TwoLevelSelectProps<T extends string> {
 }
 
 export default function TwoLevelSelect<T extends string>({
+  id,
   label,
   categories,
   enums,
@@ -25,6 +27,7 @@ export default function TwoLevelSelect<T extends string>({
       <legend className="fieldset-legend">{label}</legend>
       <div className="flex flex-wrap gap-3">
         <select
+          id={`${id}-category`}
           className="select"
           value={category}
           onChange={(event) => {
@@ -42,6 +45,7 @@ export default function TwoLevelSelect<T extends string>({
           ))}
         </select>
         <select
+          id={id}
           className="select"
           disabled={filtered.length === 1}
           value={value}

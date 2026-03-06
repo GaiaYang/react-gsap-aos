@@ -20,6 +20,7 @@ const tabs: Tab[] = [
     label: "單一動畫",
   },
   { value: "typography", label: "文本測試" },
+  { value: "large", label: "大量內容" },
 ];
 
 export default function Tabs() {

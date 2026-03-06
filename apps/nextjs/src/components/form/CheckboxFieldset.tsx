@@ -1,10 +1,12 @@
 interface CheckboxFieldsetProps {
+  id: string;
   label: string;
   checked: boolean;
   onChangeValue: (value: boolean) => void;
 }
 
 export default function CheckboxFieldset({
+  id,
   label,
   checked,
   onChangeValue,
@@ -13,6 +15,7 @@ export default function CheckboxFieldset({
     <fieldset className="fieldset w-[clamp(3rem,20rem,100%)]">
       <label className="label h-10 text-sm text-current">
         <input
+          id={id}
           type="checkbox"
           className="checkbox checkbox-primary"
           checked={checked}

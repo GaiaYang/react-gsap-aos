@@ -13,6 +13,7 @@ export default function AnchorPlacementFilter() {
 
   return (
     <TwoLevelSelect
+      id="anchorPlacement"
       label="Anchor Placement"
       categories={categories}
       enums={anchorPlacements}
