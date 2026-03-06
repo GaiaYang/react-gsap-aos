@@ -23,9 +23,9 @@ export default function TwoLevelSelect<T extends string>({
   const filtered = enums.filter((item) => item.startsWith(category));
 
   return (
-    <fieldset className="fieldset">
+    <fieldset className="fieldset col-span-full w-full">
       <legend className="fieldset-legend">{label}</legend>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2">
         <select
           id={`${id}-category`}
           className="select"

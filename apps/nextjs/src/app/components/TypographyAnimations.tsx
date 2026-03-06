@@ -6,8 +6,6 @@ import { animations } from "react-gsap-aos/constants";
 
 import useDynamicOptions from "./useDynamicOptions";
 
-import AnchorPlacementMarker from "@/components/animtaion-panel/AnchorPlacementMarker";
-
 export default function TypographyAnimations() {
   const options = useDynamicOptions();
 
@@ -468,7 +466,6 @@ function AOSGroup({
 }: React.PropsWithChildren<{ options: AnimationOptions }>) {
   return Children.map(children, (child, index) => (
     <div data-aos-container className="relative">
-      <AnchorPlacementMarker />
       {cloneElement(
         child as React.ReactElement,
         toAOSProps({

@@ -1,4 +1,3 @@
-import { createStore } from "jotai";
 import { atomWithReset } from "jotai/utils";
 import type { Animation, AnimationOptions } from "react-gsap-aos";
 
@@ -11,10 +10,4 @@ export const onceAtom = atomWithReset<AnimationOptions["once"]>(false);
 export const mirrorAtom = atomWithReset<AnimationOptions["mirror"]>(false);
 export const anchorPlacementAtom =
   atomWithReset<AnimationOptions["anchorPlacement"]>("top-bottom");
-
-// 測試用狀態
-/** 是否顯示錨點標記 */
-export const visibleAnchorAtom = atomWithReset<boolean>(false);
-/** 是否顯示偏移標記 */
-export const visibleOffsetAtom = atomWithReset<boolean>(false);
-export const devToolStore = createStore();
+export const markersAtom = atomWithReset<AnimationOptions["markers"]>(false);

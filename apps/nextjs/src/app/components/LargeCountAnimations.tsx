@@ -1,9 +1,10 @@
 "use client";
 
-import AnchorPlacementMarker from "@/components/animtaion-panel/AnchorPlacementMarker";
-import ColorBox from "@/components/ColorBox";
-import React, { useState } from "react";
+import { useState } from "react";
 import { toAOSProps } from "react-gsap-aos";
+
+import ColorBox from "@/components/ColorBox";
+
 import useDynamicOptions from "./useDynamicOptions";
 
 const list = [50, 100, 150, 200];
@@ -50,7 +51,6 @@ export default function LargeCountAnimations() {
       <ul className="mx-auto flex w-full max-w-3xl flex-col gap-[inherit]">
         {Array.from({ length: count }).map((_, index) => (
           <li key={index} data-aos-container className="relative">
-            <AnchorPlacementMarker />
             <ColorBox index={index} {...toAOSProps(options)}>
               <span>
                 {`${options.animation.replace(/\-/g, " ")} ${index + 1}`}

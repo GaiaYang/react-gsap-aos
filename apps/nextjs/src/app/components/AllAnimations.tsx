@@ -6,7 +6,6 @@ import { animations } from "react-gsap-aos/constants";
 import useDynamicOptions from "./useDynamicOptions";
 
 import ColorBox from "@/components/ColorBox";
-import AnchorPlacementMarker from "@/components/animtaion-panel/AnchorPlacementMarker";
 
 export default function AllAnimations() {
   const options = useDynamicOptions();
@@ -15,7 +14,6 @@ export default function AllAnimations() {
     <ul className="mx-auto flex w-full max-w-3xl flex-col gap-[inherit]">
       {animations.map((item, index) => (
         <li key={item} data-aos-container className="relative">
-          <AnchorPlacementMarker />
           <ColorBox
             index={index}
             {...toAOSProps({ ...options, animation: item })}

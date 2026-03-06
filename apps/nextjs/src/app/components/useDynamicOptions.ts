@@ -9,6 +9,7 @@ import {
   onceAtom,
   mirrorAtom,
   anchorPlacementAtom,
+  markersAtom,
 } from "@/jotai/animation";
 
 export default function useDynamicOptions() {
@@ -20,6 +21,7 @@ export default function useDynamicOptions() {
   const once = useAtomValue(onceAtom);
   const mirror = useAtomValue(mirrorAtom);
   const anchorPlacement = useAtomValue(anchorPlacementAtom);
+  const markers = useAtomValue(markersAtom);
   return {
     animation,
     easing,
@@ -29,5 +31,6 @@ export default function useDynamicOptions() {
     once,
     mirror,
     anchorPlacement,
+    markers,
   };
 }

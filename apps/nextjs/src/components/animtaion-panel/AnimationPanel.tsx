@@ -62,7 +62,7 @@ export default function AnimationPanel() {
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-y-4">
       <div className="overflow-x-auto">
         <div role="tablist" className="tabs tabs-border min-w-max">
           {tabs.map(renderTab)}

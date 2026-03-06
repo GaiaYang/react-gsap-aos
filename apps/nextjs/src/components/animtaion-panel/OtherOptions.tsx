@@ -10,15 +10,16 @@ import {
 
 import CheckboxFieldset from "@/components/form/CheckboxFieldset";
 import InputApplyFieldset from "@/components/form/InputApplyFieldset";
+import Container from "./Container";
 
 export default function OtherOptions() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Container>
       <OffsetInput />
       <DurationInput />
       <OnceCheckbox />
       <MirrorCheckbox />
-    </div>
+    </Container>
   );
 }
 

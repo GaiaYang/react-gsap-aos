@@ -12,7 +12,7 @@ export default function CheckboxFieldset({
   onChangeValue,
 }: CheckboxFieldsetProps) {
   return (
-    <fieldset className="fieldset w-[clamp(3rem,20rem,100%)]">
+    <fieldset className="fieldset">
       <label className="label h-10 text-sm text-current">
         <input
           id={id}

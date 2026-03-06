@@ -23,10 +23,10 @@ export default function InputApplyFieldset({
   const inputValueRef = useRef(value);
 
   return (
-    <fieldset className="fieldset w-[clamp(3rem,20rem,100%)]">
+    <fieldset className="fieldset">
       <legend className="fieldset-legend">{label}</legend>
       <div className="join">
-        <label className="input join-item">
+        <label className="input join-item w-full">
           <input
             {...inputProps}
             type="number"
