@@ -72,7 +72,6 @@ function createScrollTriggerTween(
       overwrite: "auto",
       scrollTrigger: {
         markers,
-        invalidateOnRefresh: true,
         // 優先使用上一層被標記的動畫容器
         trigger: parentElement?.hasAttribute("data-aos-container")
           ? parentElement
