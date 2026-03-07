@@ -25,7 +25,7 @@ export default function AnimationFilter() {
       {invalid ? (
         <div role="alert" className="alert col-span-full">
           <InfoIcon className="text-info" />
-          <span>此修改不會生效於該範例</span>
+          <span>該修改不會生效於此範例</span>
         </div>
       ) : null}
       <TwoLevelSelect

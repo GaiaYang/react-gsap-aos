@@ -6,6 +6,7 @@ import {
   onceAtom,
   mirrorAtom,
   durationAtom,
+  delayAtom,
 } from "@/jotai/animation";
 
 import CheckboxFieldset from "@/components/form/CheckboxFieldset";
@@ -16,6 +17,7 @@ export default function OtherOptions() {
     <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
       <OffsetInput />
       <DurationInput />
+      <DelayInput />
       <OnceCheckbox />
       <MirrorCheckbox />
     </div>
@@ -64,6 +66,30 @@ function DurationInput() {
         const int = parseInt(value, 10);
         const next = Math.max(0, Number.isInteger(int) ? int : 0);
         setDuration(next);
+        setInputValue(String(next));
+      }}
+    />
+  );
+}
+
+function DelayInput() {
+  const [delay, setDelay] = useAtom(delayAtom);
+  const [inputValue, setInputValue] = useState(delay.toString(10));
+
+  return (
+    <InputApplyFieldset
+      label="Delay"
+      inputProps={{
+        id: "duration",
+        type: "number",
+        inputMode: "numeric",
+      }}
+      value={inputValue}
+      onChangeValue={setInputValue}
+      onApply={(value) => {
+        const int = parseInt(value, 10);
+        const next = Math.max(0, Number.isInteger(int) ? int : 0);
+        setDelay(next);
         setInputValue(String(next));
       }}
     />

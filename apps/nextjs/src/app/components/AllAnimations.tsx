@@ -11,9 +11,9 @@ export default function AllAnimations() {
   const options = useDynamicOptions();
 
   return (
-    <ul className="mx-auto flex w-full max-w-3xl flex-col gap-[inherit]">
+    <ul className="mx-auto flex w-full max-w-180 flex-col gap-[inherit]">
       {animations.map((item, index) => (
-        <li key={item} data-aos-container className="relative">
+        <li key={item} data-aos-container>
           <ColorBox
             index={index}
             {...toAOSProps({ ...options, animation: item })}

@@ -10,10 +10,14 @@ export default function TypographyAnimations() {
   const options = useDynamicOptions();
 
   return (
-    <section className="w-full overflow-hidden px-6 py-12">
-      <article className="prose dark:prose-invert mx-auto pb-24">
-        <AOSGroup options={options}>
-          <svg className="h-6" fill="none" viewBox="0 0 297 24">
+    <div className="w-full overflow-hidden px-6 py-12">
+      <article className="prose dark:prose-invert mx-auto">
+        <AOSWrapper options={options}>
+          <svg
+            className="h-6 w-full max-w-74.25"
+            fill="none"
+            viewBox="0 0 297 24"
+          >
             <path
               className="fill-sky-400"
               fillRule="evenodd"
@@ -468,20 +472,20 @@ export default function TypographyAnimations() {
             What I&apos;ve written here is probably long enough, but adding this
             final sentence can&apos;t hurt.
           </p>
-        </AOSGroup>
+        </AOSWrapper>
       </article>
-    </section>
+    </div>
   );
 }
 
 const length = animations.length;
 
-function AOSGroup({
+function AOSWrapper({
   options,
   children,
 }: React.PropsWithChildren<{ options: AnimationOptions }>) {
   return Children.map(children, (child, index) => (
-    <div data-aos-container className="relative">
+    <div data-aos-container>
       {cloneElement(
         child as React.ReactElement,
         toAOSProps({

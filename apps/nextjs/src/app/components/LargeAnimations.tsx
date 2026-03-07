@@ -8,9 +8,9 @@ import ColorBox from "@/components/ColorBox";
 import useDynamicOptions from "./useDynamicOptions";
 import { InfoIcon } from "lucide-react";
 
-const list = [50, 100, 150, 200];
+const list = [50, 200, 500, 1000];
 
-export default function LargeCountAnimations() {
+export default function LargeAnimations() {
   const options = useDynamicOptions();
   const [count, setCount] = useState(list[0]);
 
@@ -37,9 +37,9 @@ export default function LargeCountAnimations() {
           ))}
         </select>
       </fieldset>
-      <ul className="mx-auto flex w-full max-w-3xl flex-col gap-[inherit]">
+      <ul className="mx-auto flex w-full max-w-180 flex-col gap-[inherit]">
         {Array.from({ length: count }).map((_, index) => (
-          <li key={index} data-aos-container className="relative">
+          <li key={index} data-aos-container>
             <ColorBox index={index} {...toAOSProps(options)}>
               <span>
                 {`${options.animation.replace(/\-/g, " ")} ${index + 1}`}

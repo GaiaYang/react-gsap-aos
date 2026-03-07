@@ -7,12 +7,12 @@ import CheckboxFieldset from "@/components/form/CheckboxFieldset";
 
 export default function DevTool() {
   return (
-    <>
+    <div className="grid gap-[inherit]">
       <MarkersCheckbox />
       <div className="col-span-full place-self-end">
         <ResetButton />
       </div>
-    </>
+    </div>
   );
 }
 

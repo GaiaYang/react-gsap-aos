@@ -159,7 +159,7 @@ import { toAOSProps } from "react-gsap-aos";
 </AOSProvider>
 ```
 
-支援巢狀容器：
+⚠️ **不建議**使用巢狀容器：
 
 ```tsx
 <div data-aos-container>
@@ -170,6 +170,8 @@ import { toAOSProps } from "react-gsap-aos";
   </div>
 </div>
 ```
+
+巢狀容器會增加動畫初始化與 ScrollTrigger 刷新的複雜度。雖然仍可註冊動畫，但使用者需自行確保在適當時機呼叫 `ScrollTrigger.refresh()`。
 
 ## API 參考
 

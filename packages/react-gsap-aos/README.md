@@ -161,7 +161,7 @@ To ensure accurate ScrollTrigger calculations, mark parent containers with `data
 </AOSProvider>
 ```
 
-Nested containers are supported:
+Nested data-aos-container usage is **not recommended**:
 
 ```tsx
 <div data-aos-container>
@@ -172,6 +172,8 @@ Nested containers are supported:
   </div>
 </div>
 ```
+
+Nested containers increase the complexity of animation initialization and ScrollTrigger refresh timing. While animations will still register, users need to manually call `ScrollTrigger.refresh()` at the appropriate time.
 
 ## API Reference
 

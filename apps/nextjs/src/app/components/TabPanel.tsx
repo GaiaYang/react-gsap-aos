@@ -3,11 +3,11 @@
 import { useAtomValue } from "jotai";
 
 import { tabIndexAtom } from "@/jotai/demo";
+import { tabs } from "./constants";
 
 import AllAnimations from "./AllAnimations";
-import SingleAnimations from "./SingleAnimations";
 import TypographyAnimations from "./TypographyAnimations";
-import LargeCountAnimations from "./LargeCountAnimations";
+import LargeAnimations from "./LargeAnimations";
 
 export default function TabPanel() {
   const index = useAtomValue(tabIndexAtom);
@@ -20,15 +20,13 @@ export default function TabPanel() {
 }
 
 function renderContent(index: number) {
-  switch (index) {
-    case 0:
+  switch (tabs[index]?.value) {
+    case "all":
       return <AllAnimations />;
-    case 1:
-      return <SingleAnimations />;
-    case 2:
+    case "large":
+      return <LargeAnimations />;
+    case "typography":
       return <TypographyAnimations />;
-    case 3:
-      return <LargeCountAnimations />;
     default:
       break;
   }
