@@ -1,13 +1,13 @@
 # react-gsap-aos
 
-[English](README.md) | 中文文檔
+[English](README.en.md) | 中文文檔
 
 輕量的 GSAP + ScrollTrigger 整合，用法類似 AOS，專為 React / Next.js 設計。
 
 [![npm version](https://img.shields.io/npm/v/react-gsap-aos.svg)](https://www.npmjs.com/package/react-gsap-aos)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-[線上展示](https://react-gsap-aos-nextjs.vercel.app) | [GitHub](https://github.com/GaiaYang/react-gsap-aos)
+[線上展示](https://react-gsap-aos-nextjs.vercel.app)
 
 ## 什麼是 react-gsap-aos？
 
@@ -298,7 +298,7 @@ refreshScrollTrigger();
 "use client";
 
 import { useState, useEffect } from "react";
-import { AOSProvider, refreshAOS } from "react-gsap-aos/client";
+import { AOSProvider, refreshScrollTrigger } from "react-gsap-aos/client";
 
 export default function DynamicList() {
   const [visible, setVisible] = useState(true);
@@ -306,7 +306,7 @@ export default function DynamicList() {
 
   useEffect(() => {
     // 佈局變更後刷新
-    refreshAOS();
+    refreshScrollTrigger();
   }, [visible]);
 
   return (

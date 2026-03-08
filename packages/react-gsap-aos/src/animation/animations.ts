@@ -13,7 +13,11 @@ export type CreateAnimationFunction = (
   options?: Partial<AnimationOptions>,
 ) => gsap.core.Tween;
 
-/** 解析 ScrollTrigger 的 `start` */
+/**
+ * 解析 ScrollTrigger 的 `start`
+ *
+ * @see https://gsap.com/docs/v3/Plugins/ScrollTrigger/#start
+ */
 function resolveScrollTriggerStart(
   anchorPlacement: AnchorPlacement,
   offset: number,
@@ -27,7 +31,11 @@ function resolveScrollTriggerStart(
   return `${anchor}${fix}`;
 }
 
-/** 解析 ScrollTrigger 的 `toggleActions` */
+/**
+ * 解析 ScrollTrigger 的 `toggleActions`
+ *
+ * @see https://gsap.com/docs/v3/Plugins/ScrollTrigger/#toggleActions
+ */
 function resolveToggleActions(once?: boolean, mirror?: boolean): string {
   if (once) return "play none none none";
   if (mirror) return "play reverse play reverse";
@@ -44,7 +52,6 @@ function createScrollTriggerTween(
   vars: AnimationPreset,
   options?: Partial<AnimationOptions>,
 ) {
-  const { from, to } = vars;
   const { parentElement } = element;
   const {
     offset,
@@ -61,11 +68,11 @@ function createScrollTriggerTween(
     element,
     {
       ...preset.from,
-      ...from,
+      ...vars.from,
     },
     {
       ...preset.to,
-      ...to,
+      ...vars.to,
       ease: easing,
       duration: duration / UNIT_MS,
       delay: delay / UNIT_MS,

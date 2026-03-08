@@ -35,7 +35,9 @@ const ANIMATION_REGISTRY: Record<Animation, CreateAnimationFunction> = {
 
 /** 建立動畫元素 */
 export default function createAnimation<E extends HTMLElement>(
+  /** 要綁定動畫的元素 */
   element: E,
+  /** 動畫選項 */
   options?: Partial<AnimationOptions>,
 ) {
   const animate = element.getAttribute("data-aos") as Animation | null;

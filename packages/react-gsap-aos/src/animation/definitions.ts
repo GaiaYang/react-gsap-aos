@@ -4,6 +4,7 @@ import {
   rotateY,
   scale,
   translate3d,
+  translate3dPercent,
 } from "./utils/createTweenVars";
 
 /** 動畫配置 */
@@ -28,41 +29,19 @@ export const DISTANCE = 100;
 /** 動畫預設配置 */
 const presets = {
   fade: {
-    from: {
-      opacity: 0,
-      transitionProperty: "opacity, transform",
-    },
-    to: {
-      opacity: 1,
-      transform: "none",
-    },
+    from: { autoAlpha: 0 },
+    to: { autoAlpha: 1, ...translate3d(0, 0, 0) },
   },
   zoom: {
-    from: {
-      opacity: 0,
-      transitionProperty: "opacity, transform",
-    },
-    to: {
-      opacity: 1,
-      ...translate3d(0, 0, 0),
-      ...scale(1),
-    },
+    from: { opacity: 0 },
+    to: { opacity: 1, ...translate3d(0, 0, 0), ...scale(1) },
   },
   slide: {
-    from: {
-      visibility: "hidden",
-      transitionProperty: "transform",
-    },
-    to: {
-      visibility: "visible",
-      ...translate3d(0, 0, 0),
-    },
+    from: { visibility: "hidden" },
+    to: { visibility: "visible", ...translate3dPercent(0, 0, 0) },
   },
   flip: {
-    from: {
-      backfaceVisibility: "hidden",
-      transitionProperty: "transform",
-    },
+    from: { backfaceVisibility: "hidden" },
     to: {},
   },
 } satisfies Record<string, AnimationPreset>;
@@ -135,68 +114,56 @@ const definitions = {
   flipUp: {
     preset: presets.flip,
     vars: {
-      from: {
-        ...perspective(2500),
-        ...rotateX("-100deg"),
-      },
+      from: { ...perspective(2500), ...rotateX("-100deg") },
       to: { ...perspective(2500), ...rotateX(0) },
     },
   },
   flipDown: {
     preset: presets.flip,
     vars: {
-      from: {
-        ...perspective(2500),
-        ...rotateX("100deg"),
-      },
+      from: { ...perspective(2500), ...rotateX("100deg") },
       to: { ...perspective(2500), ...rotateX(0) },
     },
   },
   flipLeft: {
     preset: presets.flip,
     vars: {
-      from: {
-        ...perspective(2500),
-        ...rotateY("-100deg"),
-      },
+      from: { ...perspective(2500), ...rotateY("-100deg") },
       to: { ...perspective(2500), ...rotateY(0) },
     },
   },
   flipRight: {
     preset: presets.flip,
     vars: {
-      from: {
-        ...perspective(2500),
-        ...rotateY("100deg"),
-      },
+      from: { ...perspective(2500), ...rotateY("100deg") },
       to: { ...perspective(2500), ...rotateY(0) },
     },
   },
   slideUp: {
     preset: presets.slide,
     vars: {
-      from: translate3d(0, "100%", 0),
+      from: translate3dPercent(0, 100, 0),
       to: {},
     },
   },
   slideDown: {
     preset: presets.slide,
     vars: {
-      from: translate3d(0, "-100%", 0),
+      from: translate3dPercent(0, -100, 0),
       to: {},
     },
   },
   slideLeft: {
     preset: presets.slide,
     vars: {
-      from: translate3d("100%", 0, 0),
+      from: translate3dPercent(100, 0, 0),
       to: {},
     },
   },
   slideRight: {
     preset: presets.slide,
     vars: {
-      from: translate3d("-100%", 0, 0),
+      from: translate3dPercent(-100, 0, 0),
       to: {},
     },
   },
@@ -233,40 +200,28 @@ const definitions = {
   zoomOutUp: {
     preset: presets.zoom,
     vars: {
-      from: {
-        ...translate3d(0, DISTANCE, 0),
-        ...scale(1.2),
-      },
+      from: { ...translate3d(0, DISTANCE, 0), ...scale(1.2) },
       to: {},
     },
   },
   zoomOutDown: {
     preset: presets.zoom,
     vars: {
-      from: {
-        ...translate3d(0, -DISTANCE, 0),
-        ...scale(1.2),
-      },
+      from: { ...translate3d(0, -DISTANCE, 0), ...scale(1.2) },
       to: {},
     },
   },
   zoomOutLeft: {
     preset: presets.zoom,
     vars: {
-      from: {
-        ...translate3d(DISTANCE, 0, 0),
-        ...scale(1.2),
-      },
+      from: { ...translate3d(DISTANCE, 0, 0), ...scale(1.2) },
       to: {},
     },
   },
   zoomOutRight: {
     preset: presets.zoom,
     vars: {
-      from: {
-        ...translate3d(-DISTANCE, 0, 0),
-        ...scale(1.2),
-      },
+      from: { ...translate3d(-DISTANCE, 0, 0), ...scale(1.2) },
       to: {},
     },
   },

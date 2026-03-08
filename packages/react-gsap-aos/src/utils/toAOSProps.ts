@@ -9,7 +9,11 @@ export interface AOSAttributeOptions extends Partial<AnimationOptions> {
   animation: Animation;
 }
 
-/** 將 options 轉成可直接使用的 AOS data attributes */
+/**
+ * 將動畫選項轉成可直接使用的 AOS data attributes
+ *
+ * > 不合法的值會被過濾掉
+ */
 export default function toAOSProps(
   options?: AOSAttributeOptions,
 ): Partial<AOSDataAttributes> {
