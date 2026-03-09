@@ -1,6 +1,6 @@
 {
   "name": "react-gsap-aos",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "A lightweight GSAP + ScrollTrigger integration, similar in usage to AOS, specifically designed for React / Next.js.",
   "author": "Gaia Yang",
   "license": "MIT",

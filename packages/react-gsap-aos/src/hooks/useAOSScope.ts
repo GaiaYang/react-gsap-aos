@@ -54,15 +54,13 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
   options?: UseAOSScopeOptions,
 ) {
   const containerRef = useRef<E | null>(null);
-  const observerRef = useRef<MutationObserver | null>(null);
+  const mutationObserverRef = useRef<MutationObserver | null>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
   /** 記錄每個元素對應的動畫實例 */
   const elementAnimationsRef = useRef<WeakMap<HTMLElement, gsap.core.Tween>>(
     new WeakMap(),
   );
   const currentOptionsRef = useRef(options);
-  const refreshRafIdRef = useRef<number>(0);
-  /** 標記是否執行 `ScrollTrigger.refresh()` */
-  const shouldRefreshRef = useRef(false);
 
   // 下次新增動畫才會套用覆蓋預設值
   useLayoutEffect(() => {
@@ -106,7 +104,24 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         addAnimation(element);
       };
 
-      /** 監聽元素變化 */
+      let refreshPending = false;
+      /**
+       * 合併刷新 ScrollTrigger
+       *
+       * > 將多次刷新合併在同一幀，預防萬一還是啟用 safe 參數
+       * */
+      const refreshScrollTrigger = () => {
+        if (refreshPending) return;
+
+        refreshPending = true;
+
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh(true);
+          refreshPending = false;
+        });
+      };
+
+      /** 監聽動畫元素變化 */
       const handleMutation: MutationCallback = (mutations) => {
         const removedElements = new Set<HTMLElement>();
         const addedElements = new Set<HTMLElement>();
@@ -137,26 +152,25 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         for (const element of addedElements) addAnimation(element);
         for (const element of updatedElements) updateAnimation(element);
 
-        if (addedElements.size > 0 || removedElements.size > 0) {
-          shouldRefreshRef.current = true;
+        if (removedElements.size || addedElements.size) {
+          refreshScrollTrigger();
         }
       };
 
+      let lastHeight = 0;
       /**
-       * ScrollTrigger 刷新
+       * 監聽父層容器尺寸變化
        *
-       * > `ScrollTrigger.refresh()` 會導致無限觸發滾動事件並攔截 `window.scroll`
-       *
-       * > MutationObserver 變化後才會重新開啟避免無限刷新
+       * > gsap ScrollTrigger 已經處理寬度，這裡是補上實際高度影響
        * */
-      const updateScrollTrigger = () => {
-        if (!shouldRefreshRef.current || refreshRafIdRef.current) return;
+      const handleResize: ResizeObserverCallback = ([entry]) => {
+        const height = entry.contentRect.height;
 
-        refreshRafIdRef.current = requestAnimationFrame(() => {
-          ScrollTrigger.refresh();
-          shouldRefreshRef.current = false;
-          refreshRafIdRef.current = 0;
-        });
+        if (lastHeight !== 0 && lastHeight !== height) {
+          refreshScrollTrigger();
+        }
+
+        lastHeight = height;
       };
 
       // 初始化
@@ -166,21 +180,26 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         addAnimation(element);
       }
 
-      window.addEventListener("scroll", updateScrollTrigger, { passive: true });
-      observerRef.current = new MutationObserver(handleMutation);
-      observerRef.current.observe(containerRef.current, {
+      mutationObserverRef.current = new MutationObserver(handleMutation);
+      mutationObserverRef.current.observe(containerRef.current, {
         childList: true,
         subtree: true,
         attributes: true,
         attributeFilter: AOS_ATTRIBUTE_KEYS,
       });
 
-      return () => {
-        window.removeEventListener("scroll", updateScrollTrigger);
+      resizeObserverRef.current = new ResizeObserver(handleResize);
+      resizeObserverRef.current.observe(containerRef.current);
 
-        if (observerRef.current) {
-          observerRef.current.disconnect();
-          observerRef.current = null;
+      return () => {
+        if (mutationObserverRef.current) {
+          mutationObserverRef.current.disconnect();
+          mutationObserverRef.current = null;
+        }
+
+        if (resizeObserverRef.current) {
+          resizeObserverRef.current.disconnect();
+          resizeObserverRef.current = null;
         }
       };
     },
