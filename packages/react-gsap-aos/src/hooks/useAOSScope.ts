@@ -12,10 +12,10 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 export type UseAOSScopeOptions = Partial<AnimationOptions>;
 
 /** AOS 屬性名稱 */
-const AOS_QUALIFIED_NAME = "data-aos";
+const AOS_ATTRIBUTE = "data-aos";
 /** AOS 選擇器 */
-const AOS_SELECTORS = `[${AOS_QUALIFIED_NAME}]`;
-/** AOS 屬性 */
+const AOS_SELECTOR = `[${AOS_ATTRIBUTE}]`;
+/** AOS 相關屬性名稱 */
 const AOS_ATTRIBUTE_KEYS: (AOSAttributeKey | "data-aos")[] = [
   "data-aos",
   "data-aos-offset",
@@ -29,7 +29,7 @@ const AOS_ATTRIBUTE_KEYS: (AOSAttributeKey | "data-aos")[] = [
 ];
 
 /**
- * 綁定 AOS 動畫範圍
+ * 建立並管理指定容器內的 AOS 動畫
  * 
  * @example
  * ```tsx
@@ -54,17 +54,15 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
   options?: UseAOSScopeOptions,
 ) {
   const containerRef = useRef<E | null>(null);
-  const mutationObserverRef = useRef<MutationObserver | null>(null);
-  const resizeObserverRef = useRef<ResizeObserver | null>(null);
-  /** 記錄每個元素對應的動畫實例 */
+  /** 記錄元素與對應 GSAP 動畫實例 */
   const elementAnimationsRef = useRef<WeakMap<HTMLElement, gsap.core.Tween>>(
     new WeakMap(),
   );
-  const currentOptionsRef = useRef(options);
+  const optionsRef = useRef(options);
 
-  // 下次新增動畫才會套用覆蓋預設值
+  // 更新預設動畫選項（僅影響之後新增的動畫）
   useLayoutEffect(() => {
-    currentOptionsRef.current = options;
+    optionsRef.current = options;
   }, [options]);
 
   useGSAP(
@@ -78,10 +76,7 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         const elementAnimations = elementAnimationsRef.current;
         if (elementAnimations.has(element)) return;
 
-        const newAnimation = safeCreateAnimation(
-          element,
-          currentOptionsRef.current,
-        );
+        const newAnimation = safeCreateAnimation(element, optionsRef.current);
         if (!newAnimation) return;
 
         elementAnimations.set(element, newAnimation);
@@ -104,20 +99,20 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
         addAnimation(element);
       };
 
-      let refreshPending = false;
+      let isRefreshScheduled = false;
       /**
-       * 合併刷新 ScrollTrigger
+       * 合併 ScrollTrigger.refresh 呼叫
        *
-       * > 將多次刷新合併在同一幀，預防萬一還是啟用 safe 參數
-       * */
+       * 將多次 refresh 合併到同一幀執行，避免大量 DOM 變動時重複觸發 refresh。
+       */
       const refreshScrollTrigger = () => {
-        if (refreshPending) return;
+        if (isRefreshScheduled) return;
 
-        refreshPending = true;
+        isRefreshScheduled = true;
 
         requestAnimationFrame(() => {
           ScrollTrigger.refresh(true);
-          refreshPending = false;
+          isRefreshScheduled = false;
         });
       };
 
@@ -133,14 +128,14 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
           switch (type) {
             case "attributes":
               if (target instanceof HTMLElement) {
-                // 沒有指定 'data-aos' 就不處理相關邏輯
-                if (!target.hasAttribute(AOS_QUALIFIED_NAME)) break;
+                // 只有包含 'data-aos' 的元素才需要更新動畫
+                if (!hasAOSAttribute(target)) break;
                 updatedElements.add(target);
               }
               break;
             case "childList":
-              collectElements(addedNodes, addedElements);
-              collectElements(removedNodes, removedElements);
+              collectAOSElements(addedNodes, addedElements);
+              collectAOSElements(removedNodes, removedElements);
               break;
             default:
               break;
@@ -159,11 +154,14 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
 
       let lastHeight = 0;
       /**
-       * 監聽父層容器尺寸變化
+       * 監聽容器尺寸變化
        *
-       * > gsap ScrollTrigger 已經處理寬度，這裡是補上實際高度影響
+       * ScrollTrigger 已會處理大部分 resize 情境，這裡額外監聽高度變化以確保滾動位置重新計算。
        * */
-      const handleResize: ResizeObserverCallback = ([entry]) => {
+      const handleResize: ResizeObserverCallback = (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+
         const height = entry.contentRect.height;
 
         if (lastHeight !== 0 && lastHeight !== height) {
@@ -174,32 +172,30 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
       };
 
       // 初始化
-      for (const element of containerRef.current.querySelectorAll<HTMLElement>(
-        AOS_SELECTORS,
-      )) {
+      const elements = queryAOSElements(containerRef.current);
+
+      for (const element of elements) {
         addAnimation(element);
       }
 
-      mutationObserverRef.current = new MutationObserver(handleMutation);
-      mutationObserverRef.current.observe(containerRef.current, {
+      const mutationObserver = new MutationObserver(handleMutation);
+      mutationObserver.observe(containerRef.current, {
         childList: true,
         subtree: true,
         attributes: true,
         attributeFilter: AOS_ATTRIBUTE_KEYS,
       });
 
-      resizeObserverRef.current = new ResizeObserver(handleResize);
-      resizeObserverRef.current.observe(containerRef.current);
+      const resizeObserver = new ResizeObserver(handleResize);
+      resizeObserver.observe(containerRef.current);
 
       return () => {
-        if (mutationObserverRef.current) {
-          mutationObserverRef.current.disconnect();
-          mutationObserverRef.current = null;
+        if (mutationObserver) {
+          mutationObserver.disconnect();
         }
 
-        if (resizeObserverRef.current) {
-          resizeObserverRef.current.disconnect();
-          resizeObserverRef.current = null;
+        if (resizeObserver) {
+          resizeObserver.disconnect();
         }
       };
     },
@@ -209,17 +205,27 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
   return { containerRef };
 }
 
-/** 搜尋 [data-aos] 變動元素 */
-function collectElements(nodes: NodeList, result: Set<HTMLElement>) {
+/** 從節點列表中收集所有包含 'data-aos' 的元素（包含子節點） */
+function collectAOSElements(nodes: NodeList, result: Set<HTMLElement>) {
   for (const node of nodes) {
     if (!(node instanceof HTMLElement)) continue;
 
-    if (node.hasAttribute(AOS_QUALIFIED_NAME)) {
+    if (hasAOSAttribute(node)) {
       result.add(node);
     }
 
-    for (const element of node.querySelectorAll<HTMLElement>(AOS_SELECTORS)) {
+    for (const element of queryAOSElements(node)) {
       result.add(element);
     }
   }
+}
+
+/** 判斷元素是否包含 'data-aos' 屬性 */
+function hasAOSAttribute(element: HTMLElement) {
+  return element.hasAttribute(AOS_ATTRIBUTE);
+}
+
+/** 查詢指定節點內所有 AOS 動畫元素 */
+function queryAOSElements(element: ParentNode): NodeListOf<HTMLElement> {
+  return element.querySelectorAll<HTMLElement>(AOS_SELECTOR);
 }

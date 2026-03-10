@@ -33,8 +33,8 @@ const presets = {
     to: { autoAlpha: 1, ...translate3d(0, 0, 0) },
   },
   zoom: {
-    from: { opacity: 0 },
-    to: { opacity: 1, ...translate3d(0, 0, 0), ...scale(1) },
+    from: { autoAlpha: 0 },
+    to: { autoAlpha: 1, ...translate3d(0, 0, 0), ...scale(1) },
   },
   slide: {
     from: { visibility: "hidden" },
