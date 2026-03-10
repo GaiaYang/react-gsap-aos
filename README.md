@@ -4,10 +4,6 @@
 
 [中文文檔](README.zh-TW.md) | English
 
-## Contributing
-
-This is a monorepo managed with pnpm workspaces.
-
 ### Development Setup
 
 ```bash
@@ -16,42 +12,25 @@ pnpm install
 
 # Build the library
 cd packages/react-gsap-aos
-pnpm build
+pnpm dev
 
 # Run the demo app
 cd apps/nextjs
 pnpm dev
 ```
 
-### Project Structure
-
-```
-react-gsap-aos/
-├── packages/
-│   └── react-gsap-aos/     # Core library
-│       ├── src/
-│       │   ├── animation/  # Animation definitions
-│       │   ├── components/ # AOSProvider
-│       │   ├── hooks/      # useAOSScope
-│       │   └── types.ts    # TypeScript types
-│       └── package.json
-└── apps/
-    └── nextjs/             # Demo application
-        └── src/
-```
-
 ### Conventions
 
-- **Package Manager**: Use `pnpm`
-- **Imports**: Use `@/` alias for internal imports
-- **Exports**:
+- Use `pnpm` as package manager
+- Use `@/` alias for internal imports
+- Export paths
   - `react-gsap-aos` - Types and utilities
   - `react-gsap-aos/client` - Client-side components and hooks
   - `react-gsap-aos/constants` - Animation constants
 
 ### Building
 
-The library uses `tsup` for bundling with three entry points:
+The library uses `tsup` for bundling with three entry points
 
 - `index.ts` - Main exports
 - `client.ts` - Client components
@@ -59,13 +38,17 @@ The library uses `tsup` for bundling with three entry points:
 
 ```bash
 cd packages/react-gsap-aos
-pnpm build    # Production build
-pnpm dev      # Watch mode
+# Watch mode
+pnpm dev
+# Production build
+pnpm build
 ```
 
 ## License
 
 MIT © [Gaia Yang](https://github.com/GaiaYang)
+
+Documentation and LLM [danielchim](https://github.com/danielchim)
 
 ## Credits
 

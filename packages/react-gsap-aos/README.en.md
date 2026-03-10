@@ -9,67 +9,60 @@ A lightweight GSAP + ScrollTrigger integration with an AOS-like API, specificall
 
 [Live Demo](https://react-gsap-aos-nextjs.vercel.app)
 
-## What is react-gsap-aos?
+## Project Advantages
 
-`react-gsap-aos` bridges the gap between GSAP's powerful animation capabilities and the simplicity of AOS (Animate On Scroll). It provides:
+This is a monorepo managed with pnpm workspaces.
 
-- **Familiar API**: If you've used AOS, you already know how to use this
-- **GSAP Power**: Built on GSAP + ScrollTrigger for smooth, performant animations
-- **React-First**: Designed specifically for React and Next.js with proper SSR support
-- **TypeScript**: Full type safety for animations, easings, and anchor placements
-- **Automatic Cleanup**: Properly manages animation lifecycle with React's component lifecycle
-
-### Problem It Solves
-
-While AOS is great for vanilla JavaScript, integrating it with React can be problematic:
-
-- Manual initialization and cleanup required
-- Not SSR-friendly
-- Limited TypeScript support
-- Difficult to use with dynamic content
-
-`react-gsap-aos` by React solution that automatically handles DOM mutations, component lifecycle, and SSR scenarios.
-
-## Features
-
-- 🎬 Scroll-triggered animations powered by GSAP + ScrollTrigger
-- 🎯 AOS-like API with `data-aos` attributes
-- ⚛️ Built for React / Next.js with SSR support
-- 🔄 Automatic animation management with DOM mutations
-- 📦 Multiple parallel scopes without interference
-- 🎨 34 animation presets (fade, slide, flip, zoom variants)
-- 🎭 17 easing options from GSAP
-- 📍 9 anchor placement options for precise triggering
-- 🧹 Automatic cleanup on component unmount
-- 💪 Full TypeScript support
-
-## Installation
-
-```bash
-npm install react-gsap-aos gsap @gsap/react
-# or
-yarn add react-gsap-aos gsap @gsap/react
-# or
-pnpm add react-gsap-aos gsap @gsap/react
-```
-
-### Peer Dependencies
-
-- `react` >= 17
-- `gsap` ^3.12.5
-- `@gsap/react` ^2.1.2
+- **Stable Performance** - Built on GSAP and ScrollTrigger, delivers smooth animation experience
+- **Automatic Element Tracking** - Dynamically tracks DOM element additions and removals, automatically registers animations (layout changes require manual `refreshScrollTrigger` call)
+- **Focused High-Performance Implementation** - Concentrates on core AOS functionality without unnecessary features
+- **Full TypeScript Support** - Provides complete type definitions and type safety.
 
 ## Quick Start
 
+### Basic Usage
+
 ```tsx
+"use client";
+
 import { AOSProvider } from "react-gsap-aos/client";
+import { toAOSProps } from "react-gsap-aos";
+
+export default function App() {
+  return (
+    <AOSProvider className="overflow-hidden">
+      <div data-aos-container>
+        <h1 {...toAOSProps({ animation: "fade-up" })}>Hello World</h1>
+      </div>
+    </AOSProvider>
+  );
+}
+```
+
+### Multiple Animated Elements
+
+```tsx
+"use client";
+
+import { AOSProvider } from "react-gsap-aos/client";
+import { toAOSProps } from "react-gsap-aos";
 
 export default function Demo() {
   return (
     <AOSProvider className="overflow-hidden">
       <div data-aos-container>
-        <div data-aos="fade-up" data-aos-offset="200">
-          Hello AOS
+        <div {...toAOSProps({ animation: "fade-up", duration: 600 })}>
+          First Block
+        </div>
+      </div>
+      <div data-aos-container>
+        <div {...toAOSProps({ animation: "zoom-in", delay: 200 })}>
+          Second Block
+        </div>
+      </div>
+      <div data-aos-container>
+        <div {...toAOSProps({ animation: "slide-left", easing: "power2.out" })}>
+          Third Block
         </div>
       </div>
     </AOSProvider>
@@ -77,122 +70,48 @@ export default function Demo() {
 }
 ```
 
-## Usage
-
-### Setting up AOSProvider
-
-Wrap your animated content with `AOSProvider`. All child elements with `data-aos` attributes will be automatically animated.
+### Dynamic Content
 
 ```tsx
-import { AOSProvider } from "react-gsap-aos/client";
+"use client";
 
-export default function Demo() {
+import { useState, useEffect } from "react";
+import { AOSProvider, refreshScrollTrigger } from "react-gsap-aos/client";
+import { toAOSProps } from "react-gsap-aos";
+
+export default function DynamicList() {
+  const [items, setItems] = useState([1, 2, 3]);
+
+  useEffect(() => {
+    refreshScrollTrigger();
+  }, [items]);
+
   return (
     <AOSProvider className="overflow-hidden">
-      {/* Your animated content */}
+      <button onClick={() => setItems([...items, items.length + 1])}>
+        Add Item
+      </button>
+      <ul>
+        {items.map((item) => (
+          <li key={item} data-aos-container>
+            <div {...toAOSProps({ animation: "fade-up" })}>Item {item}</div>
+          </li>
+        ))}
+      </ul>
     </AOSProvider>
   );
 }
 ```
 
-> The `overflow-hidden` class prevents elements from overflowing during their initial animation state.
-
-⚠️ **Important**: Do not nest `AOSProvider` components, as this will cause duplicate listeners and animations.
-
-### Configuring Animations with Data Attributes
-
-Use `data-aos-*` attributes to configure animation behavior:
-
-```tsx
-<div
-  data-aos="fade-up"
-  data-aos-offset={120}
-  data-aos-delay={0}
-  data-aos-duration={400}
-  data-aos-easing="ease-out-cubic"
-  data-aos-mirror={false}
-  data-aos-once={false}
-  data-aos-anchor-placement="top-bottom"
->
-  Animated content
-</div>
-```
-
-### Using toAOSProps Helper
-
-For better TypeScript support and validation, use the `toAOSProps` helper:
-
-```tsx
-import { toAOSProps } from "react-gsap-aos";
-
-<div
-  {...toAOSProps({
-    animation: "fade-up",
-    offset: 120,
-    delay: 0,
-    duration: 400,
-    easing: "power2.out",
-    once: false,
-    mirror: false,
-    anchorPlacement: "top-bottom",
-  })}
->
-  Animated content
-</div>;
-```
-
-### Container Positioning with data-aos-container
-
-To ensure accurate ScrollTrigger calculations, mark parent containers with `data-aos-container`:
-
-```tsx
-<AOSProvider className="overflow-hidden">
-  {/* ✅ Correct: Container specified */}
-  <div data-aos-container>
-    <div data-aos="fade-up" data-aos-offset="200">
-      Hello AOS
-    </div>
-  </div>
-
-  {/* ❌ Incorrect: May cause offset issues */}
-  <div data-aos="fade-up" data-aos-offset="200">
-    Hello AOS
-  </div>
-</AOSProvider>
-```
-
-Nested data-aos-container usage is **not recommended**:
-
-```tsx
-<div data-aos-container>
-  <div data-aos="fade-up">Parent animation</div>
-
-  <div data-aos-container>
-    <div data-aos="zoom-in">Nested animation</div>
-  </div>
-</div>
-```
-
-Nested containers increase the complexity of animation initialization and ScrollTrigger refresh timing. While animations will still register, users need to manually call `ScrollTrigger.refresh()` at the appropriate time.
-
 ## API Reference
 
 ### AOSProvider
 
-A wrapper component that provides animation scope for its children.
-
-**Props:**
-
-| Prop        | Type                        | Default     | Description                                |
-| ----------- | --------------------------- | ----------- | ------------------------------------------ |
-| `component` | `React.ElementType`         | `'div'`     | The container element to render            |
-| `className` | `string`                    | `undefined` | CSS classes for the container              |
-| `options`   | `Partial<AnimationOptions>` | `undefined` | Default animation options for all children |
-| `children`  | `React.ReactNode`           | -           | Child elements                             |
-
-**Example:**
+Wrapper component that provides animation scope for child elements
 
 ```tsx
+import { AOSProvider } from "react-gsap-aos/client";
+
 <AOSProvider
   component="section"
   className="overflow-hidden"
@@ -202,30 +121,27 @@ A wrapper component that provides animation scope for its children.
     once: true,
   }}
 >
-  {/* Children will inherit these default options */}
-</AOSProvider>
+  {/* Children */}
+</AOSProvider>;
 ```
 
-> The default options only affect animations generated subsequently. This is intentional behavior.
+**Props**
+
+| Name        | Type                        | Default     | Description                                |
+| ----------- | --------------------------- | ----------- | ------------------------------------------ |
+| `component` | `React.ElementType`         | `'div'`     | Container element to render                |
+| `className` | `string`                    | `undefined` | CSS class for container                    |
+| `options`   | `Partial<AnimationOptions>` | `undefined` | Default animation options for all children |
+| `children`  | `React.ReactNode`           | -           | Child elements                             |
 
 ### useAOSScope
 
-The core hook that powers `AOSProvider`. Use this when you need direct control over the container ref.
+Core hook that powers `AOSProvider`, use when you need direct control over container ref
 
 ```tsx
-function useAOSScope<E extends HTMLElement = HTMLElement>(
-  options?: Partial<AnimationOptions>,
-): { containerRef: React.RefObject<E> };
-```
-
-**Example:**
-
-```tsx
-"use client";
-
 import { useAOSScope } from "react-gsap-aos/client";
 
-export default function Demo() {
+function Demo() {
   const { containerRef } = useAOSScope<HTMLDivElement>({
     easing: "bounce.out",
     duration: 800,
@@ -239,38 +155,21 @@ export default function Demo() {
 }
 ```
 
-⚠️ **Important**:
+**Parameters**
 
-- Do not nest `useAOSScope` calls
-- Use in client components only (add `"use client"` directive)
-- Avoid placing in `app/layout.tsx` for proper cleanup
+| Name      | Type                        | Description               |
+| --------- | --------------------------- | ------------------------- |
+| `options` | `Partial<AnimationOptions>` | Default animation options |
 
-**Parallel Usage:**
+**Returns**
 
-```tsx
-function Demo() {
-  return (
-    <div>
-      <Section1 />
-      <Section2 />
-    </div>
-  );
-}
-
-function Section1() {
-  const { containerRef } = useAOSScope<HTMLDivElement>();
-  return <div ref={containerRef}>...</div>;
-}
-
-function Section2() {
-  const { containerRef } = useAOSScope<HTMLDivElement>();
-  return <div ref={containerRef}>...</div>;
-}
-```
+| Name           | Type                 | Description               |
+| -------------- | -------------------- | ------------------------- |
+| `containerRef` | `React.RefObject<E>` | Ref for container element |
 
 ### toAOSProps
 
-Converts animation options to data attributes with type safety.
+Converts animation options to data attributes with type safety
 
 ```tsx
 import { toAOSProps } from "react-gsap-aos";
@@ -280,12 +179,22 @@ const props = toAOSProps({
   duration: 600,
   easing: "power2.out",
 });
-// Returns: { "data-aos": "fade-up", "data-aos-duration": 600, ... }
+// Returns { "data-aos": "fade-up", "data-aos-duration": 600, ... }
 ```
+
+**Parameters**
+
+| Name      | Type                        | Description       |
+| --------- | --------------------------- | ----------------- |
+| `options` | `Partial<AnimationOptions>` | Animation options |
+
+**Returns**
+
+Returns an object containing `data-aos-*` attributes
 
 ### refreshScrollTrigger
 
-Manually refresh AOS animation positions, wrapper around [`ScrollTrigger.refresh`](<https://gsap.com/docs/v3/Plugins/ScrollTrigger/refresh()>).
+Manually refresh AOS animation positions, wraps `ScrollTrigger.refresh`
 
 ```tsx
 import { refreshScrollTrigger } from "react-gsap-aos";
@@ -294,75 +203,51 @@ import { refreshScrollTrigger } from "react-gsap-aos";
 refreshScrollTrigger();
 ```
 
-**Example with Dynamic Content:**
+**When to Use**
+
+Call manually when layout changes occur, GSAP and its library have already addressed the following scenarios for you.
+
+- Window resize
+- Content height changes
+
+However, due to certain limitations, the following situations require users to manually refresh.
+
+- Dynamically adding or removing large elements
+
+https://gsap.com/docs/v3/Plugins/ScrollTrigger/refresh()
+
+## Type Definitions
+
+### AnimationOptions
+
+Complete type definition for animation options
 
 ```tsx
-"use client";
-
-import { useState, useEffect } from "react";
-import { AOSProvider, refreshScrollTrigger } from "react-gsap-aos/client";
-
-export default function DynamicList() {
-  const [visible, setVisible] = useState(true);
-  const [items, setItems] = useState([1, 2, 3]);
-
-  useEffect(() => {
-    // Refresh after visible change
-    refreshScrollTrigger();
-  }, [visible]);
-
-  return (
-    <AOSProvider className="overflow-hidden">
-      <button onClick={() => setVisible((e) => !e)}>switch visible</button>
-      // When visible changes, the layout changes.
-      {visible ? <div className="h-80" /> : null}
-      <div data-aos-container>
-        <div key={item} data-aos="fade-up">
-          Hello AOS
-        </div>
-      </div>
-    </AOSProvider>
-  );
+interface AnimationOptions {
+  animation?: Animation;
+  offset?: number;
+  delay?: number;
+  duration?: number;
+  easing?: Easing;
+  once?: boolean;
+  mirror?: boolean;
+  anchorPlacement?: AnchorPlacement;
+  markers?: boolean;
 }
 ```
 
-## Animation Options
+### Animation
 
-| Option            | Type              | Data Attribute              | Default        | Description                    |
-| ----------------- | ----------------- | --------------------------- | -------------- | ------------------------------ |
-| `animation`       | `Animation`       | `data-aos`                  | `undefined`    | Animation type                 |
-| `offset`          | `number`          | `data-aos-offset`           | `120`          | Offset (px) from trigger point |
-| `delay`           | `number`          | `data-aos-delay`            | `0`            | Animation delay (ms)           |
-| `duration`        | `number`          | `data-aos-duration`         | `400`          | Animation duration (ms)        |
-| `easing`          | `Easing`          | `data-aos-easing`           | `"none"`       | Easing function                |
-| `once`            | `boolean`         | `data-aos-once`             | `false`        | Animate only once              |
-| `mirror`          | `boolean`         | `data-aos-mirror`           | `false`        | Reverse animation on scroll up |
-| `anchorPlacement` | `AnchorPlacement` | `data-aos-anchor-placement` | `"top-bottom"` | Trigger position               |
-| `markers`         | `boolean`         | `data-aos-markers`          | `false`        | ScrollTrigger markers          |
+Supported animation types
 
-## Available Types
-
-### Animation Types (34 total)
-
-**Fade Animations:**
-
-- `fade`, `fade-up`, `fade-down`, `fade-left`, `fade-right`
-- `fade-up-right`, `fade-up-left`, `fade-down-right`, `fade-down-left`
-
-**Flip Animations:**
-
+- `fade`, `fade-up`, `fade-down`, `fade-left`, `fade-right`, `fade-up-right`, `fade-up-left`, `fade-down-right`, `fade-down-left`
 - `flip-up`, `flip-down`, `flip-left`, `flip-right`
-
-**Slide Animations:**
-
 - `slide-up`, `slide-down`, `slide-left`, `slide-right`
+- `zoom-in`, `zoom-in-up`, `zoom-in-down`, `zoom-in-left`, `zoom-in-right`, `zoom-out`, `zoom-out-up`, `zoom-out-down`, `zoom-out-left`, `zoom-out-right`
 
-**Zoom Animations:**
+### Easing
 
-- `zoom-in`, `zoom-in-up`, `zoom-in-down`, `zoom-in-left`, `zoom-in-right`
-- `zoom-out`, `zoom-out-up`, `zoom-out-down`, `zoom-out-left`, `zoom-out-right`
-
-### Easing Types (17 total)
+Supported easing functions
 
 - `none`
 - `power1`, `power1.in`, `power1.out`, `power1.inOut`
@@ -376,10 +261,22 @@ export default function DynamicList() {
 - `expo`, `expo.in`, `expo.out`, `expo.inOut`
 - `sine`, `sine.in`, `sine.out`, `sine.inOut`
 
-### Anchor Placement Types (9 total)
+### AnchorPlacement
 
-Format: `[element-position]-[viewport-position]`
+Anchor placement types (9 total), format is `[element-position]-[viewport-position]`
 
 - `top-bottom`, `top-center`, `top-top`
 - `center-bottom`, `center-center`, `center-top`
 - `bottom-bottom`, `bottom-center`, `bottom-top`
+
+## License
+
+MIT © [Gaia Yang](https://github.com/GaiaYang)
+
+Documentation and LLM [danielchim](https://github.com/danielchim)
+
+## Credits
+
+Animation styles inspired by [AOS](https://github.com/michalsnik/aos)
+
+Powered by [GSAP](https://greensock.com/gsap) and [ScrollTrigger](https://greensock.com/scrolltrigger)

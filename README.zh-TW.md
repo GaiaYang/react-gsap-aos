@@ -4,10 +4,6 @@
 
 [English](README.md) | 中文文檔
 
-## 貢獻
-
-這是一個使用 pnpm workspaces 管理的 monorepo。
-
 ## 開發設定
 
 ```bash
@@ -16,42 +12,25 @@ pnpm install
 
 # 建置套件庫
 cd packages/react-gsap-aos
-pnpm build
+pnpm dev
 
 # 執行展示網站
 cd apps/nextjs
 pnpm dev
 ```
 
-### 專案結構
-
-```
-react-gsap-aos/
-├── packages/
-│   └── react-gsap-aos/     # 核心函式庫
-│       ├── src/
-│       │   ├── animation/  # 動畫定義
-│       │   ├── components/ # AOSProvider
-│       │   ├── hooks/      # useAOSScope
-│       │   └── types.ts    # TypeScript 型別
-│       └── package.json
-└── apps/
-    └── nextjs/             # 展示應用程式
-        └── src/
-```
-
 ### 規範
 
-- **套件管理器**：使用 `pnpm`
-- **匯入**：內部匯入使用 `@/` 別名
-- **匯出**：
+- 使用 `pnpm` 作為套件管理器
+- 內部匯入使用 `@/` 別名
+- 匯出路徑
   - `react-gsap-aos` - 型別和工具
   - `react-gsap-aos/client` - 客戶端元件和 hooks
   - `react-gsap-aos/constants` - 動畫常數
 
 ### 建置
 
-函式庫使用 `tsup` 進行打包，有三個進入點：
+函式庫使用 `tsup` 進行打包，有三個進入點
 
 - `index.ts` - 主要匯出
 - `client.ts` - 客戶端元件
@@ -59,13 +38,17 @@ react-gsap-aos/
 
 ```bash
 cd packages/react-gsap-aos
-pnpm build    # 正式版建置
-pnpm dev      # 監聽模式
+# 監聽模式
+pnpm dev
+# 正式版建置
+pnpm build
 ```
 
 ## 授權
 
 MIT © [Gaia Yang](https://github.com/GaiaYang)
+
+說明文件以及LLM [danielchim](https://github.com/danielchim)
 
 ## 致謝
 
