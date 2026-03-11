@@ -61,7 +61,9 @@ export default function Demo() {
 }
 ```
 
-### Nested Animations with Delays
+### Sequential Animations
+
+For sequential animations, use stagger delays instead of nesting `data-aos-container`. Nested containers are not recommended as they may cause timing issues.
 
 ```tsx
 "use client";
@@ -69,26 +71,18 @@ export default function Demo() {
 import { AOSProvider } from "react-gsap-aos/client";
 import { toAOSProps } from "react-gsap-aos";
 
-const DURATION = 400;
-
 export default function Card() {
   return (
     <AOSProvider className="overflow-hidden">
       <div data-aos-container>
-        <div {...toAOSProps({ animation: "fade-up", duration: DURATION })} className="card">
-          <div data-aos-container>
-            <img {...toAOSProps({ animation: "zoom-in", delay: DURATION })} src="..." alt="..." />
-          </div>
-          <div data-aos-container>
-            <h2 {...toAOSProps({ animation: "slide-right", delay: DURATION })}>
-              Title
-            </h2>
-          </div>
-          <div data-aos-container>
-            <button {...toAOSProps({ animation: "slide-left", delay: DURATION })}>
-              Button
-            </button>
-          </div>
+        <div {...toAOSProps({ animation: "fade-up", duration: 400 })} className="card">
+          <img {...toAOSProps({ animation: "zoom-in", delay: 100 })} src="..." alt="..." />
+          <h2 {...toAOSProps({ animation: "slide-right", delay: 200 })}>
+            Title
+          </h2>
+          <button {...toAOSProps({ animation: "slide-left", delay: 300 })}>
+            Button
+          </button>
         </div>
       </div>
     </AOSProvider>
@@ -282,7 +276,7 @@ Returns an object containing `data-aos-*` attributes
 Manually refresh AOS animation positions, wraps `ScrollTrigger.refresh`
 
 ```tsx
-import { refreshScrollTrigger } from "react-gsap-aos";
+import { refreshScrollTrigger } from "react-gsap-aos/client";
 
 // Call after dynamic DOM changes
 refreshScrollTrigger();
@@ -318,7 +312,7 @@ interface AnimationOptions {
 
 ### Animation
 
-Supported animation types (34 total)
+Supported animation types (27 total)
 
 - Fade animations `fade`, `fade-up`, `fade-down`, `fade-left`, `fade-right`, `fade-up-right`, `fade-up-left`, `fade-down-right`, `fade-down-left`
 - Flip animations `flip-up`, `flip-down`, `flip-left`, `flip-right`
@@ -327,7 +321,7 @@ Supported animation types (34 total)
 
 ### Easing
 
-Supported easing functions (17 total)
+Supported easing functions (41 total)
 
 - `none`
 - `power1`, `power1.in`, `power1.out`, `power1.inOut`

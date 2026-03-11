@@ -62,7 +62,9 @@ export default function Demo() {
 }
 ```
 
-### 巢狀動畫與延遲
+### 連續動畫
+
+對於連續動畫，請使用漸進延遲而非巢狀 `data-aos-container`。不建議使用巢狀容器，因為可能會導致時序問題。
 
 ```tsx
 "use client";
@@ -70,26 +72,18 @@ export default function Demo() {
 import { AOSProvider } from "react-gsap-aos/client";
 import { toAOSProps } from "react-gsap-aos";
 
-const DURATION = 400;
-
 export default function Card() {
   return (
     <AOSProvider className="overflow-hidden">
       <div data-aos-container>
-        <div {...toAOSProps({ animation: "fade-up", duration: DURATION })} className="card">
-          <div data-aos-container>
-            <img {...toAOSProps({ animation: "zoom-in", delay: DURATION })} src="..." alt="..." />
-          </div>
-          <div data-aos-container>
-            <h2 {...toAOSProps({ animation: "slide-right", delay: DURATION })}>
-              標題
-            </h2>
-          </div>
-          <div data-aos-container>
-            <button {...toAOSProps({ animation: "slide-left", delay: DURATION })}>
-              按鈕
-            </button>
-          </div>
+        <div {...toAOSProps({ animation: "fade-up", duration: 400 })} className="card">
+          <img {...toAOSProps({ animation: "zoom-in", delay: 100 })} src="..." alt="..." />
+          <h2 {...toAOSProps({ animation: "slide-right", delay: 200 })}>
+            標題
+          </h2>
+          <button {...toAOSProps({ animation: "slide-left", delay: 300 })}>
+            按鈕
+          </button>
         </div>
       </div>
     </AOSProvider>
@@ -283,7 +277,7 @@ const props = toAOSProps({
 手動刷新 AOS 動畫位置，封裝自 `ScrollTrigger.refresh`
 
 ```tsx
-import { refreshScrollTrigger } from "react-gsap-aos";
+import { refreshScrollTrigger } from "react-gsap-aos/client";
 
 // 在動態 DOM 變更後呼叫
 refreshScrollTrigger();
@@ -319,7 +313,7 @@ interface AnimationOptions {
 
 ### Animation
 
-支援的動畫類型（共 34 種）
+支援的動畫類型（共 27 種）
 
 - 淡入動畫 `fade`, `fade-up`, `fade-down`, `fade-left`, `fade-right`, `fade-up-right`, `fade-up-left`, `fade-down-right`, `fade-down-left`
 - 翻轉動畫 `flip-up`, `flip-down`, `flip-left`, `flip-right`
@@ -328,7 +322,7 @@ interface AnimationOptions {
 
 ### Easing
 
-支援的緩動函式（共 17 種）
+支援的緩動函式（共 41 種）
 
 - `none`
 - `power1`, `power1.in`, `power1.out`, `power1.inOut`
