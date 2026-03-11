@@ -22,12 +22,12 @@ export default function toAOSProps(
   return omitNil({
     "data-aos": options.animation,
     "data-aos-offset": toNumberAttr(options.offset),
-    "data-aos-delay": toNumberAttr(options.delay),
-    "data-aos-duration": toNumberAttr(options.duration),
-    "data-aos-easing": validateEnumValue(easings, options.easing),
+    "data-aos-delay": toNumberAttr(options.delay, 0),
+    "data-aos-duration": toNumberAttr(options.duration, 0),
+    "data-aos-easing": toEnumAttr(easings, options.easing),
     "data-aos-mirror": toBooleanAttr(options.mirror),
     "data-aos-once": toBooleanAttr(options.once),
-    "data-aos-anchor-placement": validateEnumValue(
+    "data-aos-anchor-placement": toEnumAttr(
       anchorPlacements,
       options.anchorPlacement,
     ),
@@ -56,10 +56,16 @@ function toBooleanAttr(value?: boolean) {
   return typeof value === "boolean" ? String(value) : undefined;
 }
 
-function toNumberAttr(value?: number) {
-  return Number.isInteger(value) ? String(value) : undefined;
+function toNumberAttr(value?: number, min?: number) {
+  if (typeof value !== "number" || !Number.isInteger(value)) {
+    return undefined;
+  }
+
+  const next = typeof min === "number" ? Math.max(min, value) : value;
+
+  return String(next);
 }
 
-function validateEnumValue<T>(list: readonly T[], value: T) {
+function toEnumAttr<T>(list: readonly T[], value: T) {
   return list.includes(value) ? value : undefined;
 }

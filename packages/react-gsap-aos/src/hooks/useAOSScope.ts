@@ -67,7 +67,9 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
 
   useGSAP(
     (_, contextSafe) => {
-      if (!containerRef.current || !contextSafe) return;
+      const container = containerRef.current;
+
+      if (!container || !contextSafe) return;
 
       const safeCreateAnimation = contextSafe(createAnimation);
 
@@ -156,7 +158,7 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
       /**
        * 監聽容器尺寸變化
        *
-       * ScrollTrigger 已會處理大部分 resize 情境，這裡額外監聽高度變化以確保滾動位置重新計算。
+       * ScrollTrigger 已會處理大部分 resize 情境，這裡額外監聽高度變化以確保重新計算。
        * */
       const handleResize: ResizeObserverCallback = (entries) => {
         const entry = entries[0];
@@ -172,14 +174,14 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
       };
 
       // 初始化
-      const elements = queryAOSElements(containerRef.current);
+      const elements = queryAOSElements(container);
 
       for (const element of elements) {
         addAnimation(element);
       }
 
       const mutationObserver = new MutationObserver(handleMutation);
-      mutationObserver.observe(containerRef.current, {
+      mutationObserver.observe(container, {
         childList: true,
         subtree: true,
         attributes: true,
@@ -187,7 +189,7 @@ export default function useAOSScope<E extends HTMLElement = HTMLElement>(
       });
 
       const resizeObserver = new ResizeObserver(handleResize);
-      resizeObserver.observe(containerRef.current);
+      resizeObserver.observe(container);
 
       return () => {
         if (mutationObserver) {
@@ -226,6 +228,6 @@ function hasAOSAttribute(element: HTMLElement) {
 }
 
 /** 查詢指定節點內所有 AOS 動畫元素 */
-function queryAOSElements(element: ParentNode): NodeListOf<HTMLElement> {
-  return element.querySelectorAll<HTMLElement>(AOS_SELECTOR);
+function queryAOSElements(node: ParentNode): NodeListOf<HTMLElement> {
+  return node.querySelectorAll<HTMLElement>(AOS_SELECTOR);
 }

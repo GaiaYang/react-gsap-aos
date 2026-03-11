@@ -70,6 +70,8 @@ export default function Demo() {
 }
 ```
 
+**It is not recommended** to use nested animations. While the animations will still register, users must manually refresh at the appropriate time.
+
 ### Dynamic Content
 
 ```tsx
@@ -129,7 +131,7 @@ import { AOSProvider } from "react-gsap-aos/client";
 
 | Name        | Type                        | Default     | Description                                |
 | ----------- | --------------------------- | ----------- | ------------------------------------------ |
-| `component` | `React.ElementType`         | `'div'`     | Container element to render                |
+| `component` | `React.ElementType`         | `'div'`     | Block element to render                    |
 | `className` | `string`                    | `undefined` | CSS class for container                    |
 | `options`   | `Partial<AnimationOptions>` | `undefined` | Default animation options for all children |
 | `children`  | `React.ReactNode`           | -           | Child elements                             |

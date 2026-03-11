@@ -16,10 +16,14 @@ export default function mergeOptions(
 
       switch (key) {
         case "offset":
+          if (typeof value === "number" && Number.isInteger(value)) {
+            result[key] = value;
+          }
+          break;
         case "delay":
         case "duration":
           if (typeof value === "number" && Number.isInteger(value)) {
-            result[key] = value;
+            result[key] = Math.max(0, value);
           }
           break;
         case "once":

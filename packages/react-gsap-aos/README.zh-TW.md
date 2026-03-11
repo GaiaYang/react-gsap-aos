@@ -68,6 +68,8 @@ export default function Demo() {
 }
 ```
 
+**不建議**使用嵌套動畫，雖然動畫仍然會注冊，但是需要使用者在恰當時機點自行刷新。
+
 ### 動態內容
 
 ```tsx
@@ -127,7 +129,7 @@ import { AOSProvider } from "react-gsap-aos/client";
 
 | 名稱        | 型別                        | 預設值      | 說明                     |
 | ----------- | --------------------------- | ----------- | ------------------------ |
-| `component` | `React.ElementType`         | `'div'`     | 要渲染的區塊容器元素     |
+| `component` | `React.ElementType`         | `'div'`     | 要渲染的區塊元素         |
 | `className` | `string`                    | `undefined` | 容器的 CSS 類別          |
 | `options`   | `Partial<AnimationOptions>` | `undefined` | 所有子元素的預設動畫選項 |
 | `children`  | `React.ReactNode`           | -           | 子元素                   |
