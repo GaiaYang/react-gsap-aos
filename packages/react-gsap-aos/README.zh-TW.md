@@ -48,18 +48,23 @@ import { toAOSProps } from "react-gsap-aos";
 export default function Demo() {
   return (
     <AOSProvider className="overflow-hidden">
+      {/* 有 `data-aos-container`，ScrollTrigger 將使用它作為觸發點 */}
       <div data-aos-container>
         <div {...toAOSProps({ animation: "fade-up", duration: 600 })}>
           第一個區塊
         </div>
       </div>
+      {/* 同樣有 `data-aos-container`，即使動畫元素被多層包裹，也會優先使用最接近的容器作為觸發點 */}
       <div data-aos-container>
-        <div {...toAOSProps({ animation: "zoom-in", delay: 200 })}>
-          第二個區塊
+        <div>
+          <div {...toAOSProps({ animation: "fade-up", duration: 600 })}>
+            第二個區塊
+          </div>
         </div>
       </div>
-      <div data-aos-container>
-        <div {...toAOSProps({ animation: "slide-left", easing: "power2.out" })}>
+      {/* 沒有 `data-aos-container`，ScrollTrigger 會自動向上尋找父元素作為觸發點 */}
+      <div>
+        <div {...toAOSProps({ animation: "zoom-in", delay: 200 })}>
           第三個區塊
         </div>
       </div>
@@ -68,7 +73,15 @@ export default function Demo() {
 }
 ```
 
-**不建議**使用嵌套動畫，雖然動畫仍然會注冊，但是需要使用者在恰當時機點自行刷新。
+### 觸發行為說明
+
+1. 自動尋找最接近的 `data-aos-container` 容器，ScrollTrigger 會用它來量測位置。
+2. 如果沒有，就會退回到父元素，都找不到的情況就退回到自身。
+
+#### 注意事項
+
+- **不建議**嵌套動畫，雖然仍可注冊，但會因觸發點計算順序導致偏移，需要使用者自行刷新 `ScrollTrigger.refresh()`。
+- 動畫元素仍建議放在單獨容器，以協助正確定位。
 
 ### 動態內容
 
@@ -127,12 +140,12 @@ import { AOSProvider } from "react-gsap-aos/client";
 
 **屬性**
 
-| 名稱        | 型別                        | 預設值      | 說明                     |
-| ----------- | --------------------------- | ----------- | ------------------------ |
-| `component` | `React.ElementType`         | `'div'`     | 要渲染的區塊元素         |
-| `className` | `string`                    | `undefined` | 容器的 CSS 類別          |
-| `options`   | `Partial<AnimationOptions>` | `undefined` | 所有子元素的預設動畫選項 |
-| `children`  | `React.ReactNode`           | -           | 子元素                   |
+| 名稱        | 型別                        | 預設值      | 說明                                             |
+| ----------- | --------------------------- | ----------- | ------------------------------------------------ |
+| `component` | `React.ElementType`         | `'div'`     | 要渲染的區塊元素                                 |
+| `className` | `string`                    | `undefined` | 容器的 CSS 類別                                  |
+| `options`   | `Partial<AnimationOptions>` | `undefined` | 所有子元素的預設動畫選項，下次創建動畫時才會套用 |
+| `children`  | `React.ReactNode`           | -           | 子元素                                           |
 
 ### useAOSScope
 
@@ -157,9 +170,9 @@ function Demo() {
 
 **參數**
 
-| 名稱      | 型別                        | 說明         |
-| --------- | --------------------------- | ------------ |
-| `options` | `Partial<AnimationOptions>` | 動畫預設選項 |
+| 名稱      | 型別                        | 說明                                 |
+| --------- | --------------------------- | ------------------------------------ |
+| `options` | `Partial<AnimationOptions>` | 動畫預設選項，下次創建動畫時才會套用 |
 
 **回傳值**
 
@@ -169,7 +182,7 @@ function Demo() {
 
 ### toAOSProps
 
-將動畫選項轉換為 data 屬性，具有型別安全
+將動畫選項轉換為 data 屬性
 
 ```tsx
 import { toAOSProps } from "react-gsap-aos";

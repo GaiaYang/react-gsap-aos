@@ -50,16 +50,19 @@ import { toAOSProps } from "react-gsap-aos";
 export default function Demo() {
   return (
     <AOSProvider className="overflow-hidden">
+      {/* has a data-aos-container, so ScrollTrigger will use it as the trigger. */}
       <div data-aos-container>
         <div {...toAOSProps({ animation: "fade-up", duration: 600 })}>
           First Block
         </div>
       </div>
+      {/* also has a data-aos-container; even if the animated element is wrapped in multiple layers, the closest container will be used as the trigger. */}
       <div data-aos-container>
         <div {...toAOSProps({ animation: "zoom-in", delay: 200 })}>
           Second Block
         </div>
       </div>
+      {/* no container, so ScrollTrigger automatically searches upward to the parent element for the trigger. */}
       <div data-aos-container>
         <div {...toAOSProps({ animation: "slide-left", easing: "power2.out" })}>
           Third Block
@@ -70,7 +73,15 @@ export default function Demo() {
 }
 ```
 
-**It is not recommended** to use nested animations. While the animations will still register, users must manually refresh at the appropriate time.
+### Trigger Behavior
+
+1. Automatically find the nearest `data-aos-container`; ScrollTrigger will use it to measure the trigger position.
+2. If none exists, it will fall back to the parent element, and if that is also unavailable, it will fall back to the element itself.
+
+#### Notes
+
+- Nested animations are not recommended. They can still be registered, but the trigger calculation order may cause offset issues, so manual `ScrollTrigger.refresh()` may be required.
+- It is still recommended to place animation elements in a separate container to ensure correct positioning.
 
 ### Dynamic Content
 
@@ -129,12 +140,12 @@ import { AOSProvider } from "react-gsap-aos/client";
 
 **Props**
 
-| Name        | Type                        | Default     | Description                                |
-| ----------- | --------------------------- | ----------- | ------------------------------------------ |
-| `component` | `React.ElementType`         | `'div'`     | Block element to render                    |
-| `className` | `string`                    | `undefined` | CSS class for container                    |
-| `options`   | `Partial<AnimationOptions>` | `undefined` | Default animation options for all children |
-| `children`  | `React.ReactNode`           | -           | Child elements                             |
+| Name        | Type                        | Default     | Description                                                                                            |
+| ----------- | --------------------------- | ----------- | ------------------------------------------------------------------------------------------------------ |
+| `component` | `React.ElementType`         | `'div'`     | Block element to render                                                                                |
+| `className` | `string`                    | `undefined` | CSS class for container                                                                                |
+| `options`   | `Partial<AnimationOptions>` | `undefined` | Default animation options for all children, It will be applied the next time the animation is created. |
+| `children`  | `React.ReactNode`           | -           | Child elements                                                                                         |
 
 ### useAOSScope
 
@@ -159,9 +170,9 @@ function Demo() {
 
 **Parameters**
 
-| Name      | Type                        | Description               |
-| --------- | --------------------------- | ------------------------- |
-| `options` | `Partial<AnimationOptions>` | Default animation options |
+| Name      | Type                        | Description                                                                           |
+| --------- | --------------------------- | ------------------------------------------------------------------------------------- |
+| `options` | `Partial<AnimationOptions>` | Default animation options, It will be applied the next time the animation is created. |
 
 **Returns**
 
@@ -171,7 +182,7 @@ function Demo() {
 
 ### toAOSProps
 
-Converts animation options to data attributes with type safety
+Converts animation options to data attributes
 
 ```tsx
 import { toAOSProps } from "react-gsap-aos";

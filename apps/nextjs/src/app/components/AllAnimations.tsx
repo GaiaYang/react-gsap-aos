@@ -13,7 +13,7 @@ export default function AllAnimations() {
   return (
     <ul className="mx-auto flex w-full max-w-180 flex-col gap-[inherit]">
       {animations.map((item, index) => (
-        <li key={item} data-aos-container>
+        <li key={item}>
           <ColorBox
             index={index}
             {...toAOSProps({ ...options, animation: item })}

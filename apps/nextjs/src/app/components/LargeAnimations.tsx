@@ -39,7 +39,7 @@ export default function LargeAnimations() {
       </fieldset>
       <ul className="mx-auto flex w-full max-w-180 flex-col gap-[inherit]">
         {Array.from({ length: count }).map((_, index) => (
-          <li key={index} data-aos-container>
+          <li key={index}>
             <ColorBox index={index} {...toAOSProps(options)}>
               <span>
                 {`${options.animation.replace(/\-/g, " ")} ${index + 1}`}

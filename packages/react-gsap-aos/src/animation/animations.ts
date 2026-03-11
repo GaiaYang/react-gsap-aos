@@ -52,7 +52,6 @@ function createScrollTriggerTween(
   vars: AnimationPreset,
   options?: Partial<AnimationOptions>,
 ) {
-  const { parentElement } = element;
   const {
     offset,
     delay,
@@ -79,10 +78,10 @@ function createScrollTriggerTween(
       overwrite: "auto",
       scrollTrigger: {
         markers,
-        // 優先使用上一層被標記的動畫容器
-        trigger: parentElement?.hasAttribute("data-aos-container")
-          ? parentElement
-          : element,
+        trigger:
+          element.closest("[data-aos-container]") ??
+          element.parentElement ??
+          element,
         toggleActions: resolveToggleActions(once, mirror),
         start: resolveScrollTriggerStart(anchorPlacement, offset),
       },
