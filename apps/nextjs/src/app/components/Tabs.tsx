@@ -19,7 +19,10 @@ export default function Tabs() {
             type="button"
             onClick={() => {
               setTabIndex(index);
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({
+                top: window.innerHeight - 64,
+                behavior: "smooth",
+              });
             }}
             className={cn("tab", { "tab-active": tabIndex === index })}
           >
