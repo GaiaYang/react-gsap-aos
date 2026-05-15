@@ -62,18 +62,18 @@
     "react-dom": ">=17"
   },
   "devDependencies": {
-    "@types/node": "^20.19.37",
+    "@types/node": "^20.19.41",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "^3.8.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "prettier": "^3.8.3",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.0"
+    "typescript-eslint": "^8.59.3"
   },
-  "packageManager": "pnpm@10.32.0"
+  "packageManager": "pnpm@11.1.2"
 }

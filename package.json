@@ -1,7 +1,7 @@
 {
   "name": "react-gsap-aos-monorepo",
   "private": true,
-  "packageManager": "pnpm@10.32.0",
+  "packageManager": "pnpm@11.1.2",
   "workspaces": [
     "packages/*",
     "apps/*"
